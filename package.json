@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
-    "@cloudflare/vite-plugin": "^2.0.0-beta.v.4",
+    "@cloudflare/vite-plugin": "^2.0.0-beta.v.8",
     "@content-collections/cli": "^0.1.9",
     "@content-collections/core": "^0.15.3",
     "@content-collections/markdown": "^0.1.4",
@@ -71,7 +71,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
-    "cf": "1.0.0-beta.21",
+    "cf": "1.0.0-beta.26",
     "lint-staged": "^17.6.0",
     "satori": "^0.35.0",
     "tailwindcss": "^4.3.3",
