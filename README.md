@@ -30,6 +30,8 @@ E2E はテスト専用のローカル SQLite に seed を入れ、Node アダプ
 
 Astro アダプタが `wrangler.jsonc` から生成する Worker 設定を cf CLI 用 Build Output に変換し、`cf deploy --prebuilt` で公開する。本番 Worker は `blog`、ステージングは `blog-staging`。D1 と R2 は環境ごとに別名で定義している。ステージングの自動デプロイと PR プレビューは、専用 CMS リソースの準備後に GitHub Variables の `EMDASH_STAGING_READY` / `EMDASH_PREVIEW_READY` を `true` にすると有効になる。
 
+ステージングの `/_emdash/` は初回管理者を第三者に作られないよう `EMDASH_ADMIN_DISABLED=1` で 403 にしている。管理画面を使う段階では、先に認証によるアクセス制限を用意してからこの設定を外す。配備ワークフローは同じ D1 に未適用の EmDash migration がある場合、公開前の `emdash migrate --check` で止まる。
+
 本番の既存 Worker を切り替える前に、同じ `blog` Worker の版 URL で新しい D1 を初期化し、記事を投入する。cf 認証と配備の承認を得てから、同じビルド成果物に対して順番に実行する。
 
 ```sh
@@ -37,11 +39,14 @@ pnpm build
 pnpm exec cf workers versions create --prebuilt --mode production --preview-alias emdash-migrate
 ```
 
-`https://emdash-migrate-blog.sh1ma.workers.dev/` を一度開いて EmDash のマイグレーションとスキーマ作成を完了させる。版 URL の `/_emdash/` は Worker が 403 で拒否する。`cf d1 list --name blog-emdash` で新しい DB の ID を確認し、`ec_posts` が空であることを確認してから記事を投入する。
+`https://emdash-migrate-blog.sh1ma.workers.dev/` を開いて D1 の初期化を開始する。版 URL の `/_emdash/` は Worker が 403 で拒否する。`cf d1 list --name blog-emdash` で新しい DB の ID を確認する。初回アクセスで 503 が返る場合は、同じビルドの `.emdash/migrations.json` を使い、EmDash の [core migration 手順](https://docs.emdashcms.com/deployment/core-migrations/) に従って未適用分を完了させる。`emdash migrate` には D1 への書き込み権限を持つ `CLOUDFLARE_API_TOKEN` が必要。ロックが残る場合は `--status` の適用件数とロック ID が動いていないことを確認してから引き継ぐ。
+
+マイグレーション後に版 URL を再読して seed のスキーマを適用し、`ec_posts` が空であることを確認してから記事を投入する。
 
 ```sh
 pnpm prepare:d1-import
 export EMDASH_D1_ID="REPLACE_WITH_D1_UUID"
+pnpm exec emdash migrate --check --account-id "$CLOUDFLARE_ACCOUNT_ID" --d1 "$EMDASH_D1_ID"
 pnpm exec cf d1 query "$EMDASH_D1_ID" --sql 'SELECT COUNT(*) AS count FROM ec_posts'
 pnpm exec cf d1 query "$EMDASH_D1_ID" --batch @.emdash/d1-import/posts.batch.json
 pnpm exec cf d1 query "$EMDASH_D1_ID" --sql 'SELECT locale, COUNT(*) AS count FROM ec_posts GROUP BY locale'

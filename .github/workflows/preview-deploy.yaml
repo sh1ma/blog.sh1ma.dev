@@ -65,7 +65,9 @@ jobs:
         if: vars.EMDASH_PREVIEW_READY == 'true'
         env:
           PREVIEW_ALIAS: ${{ steps.preview.outputs.alias }}
-        run: pnpm exec cf workers versions create --prebuilt --mode staging --preview-alias "$PREVIEW_ALIAS"
+        run: |
+          pnpm exec emdash migrate --check --wrangler-config wrangler.jsonc --wrangler-env staging --account-id "$CLOUDFLARE_ACCOUNT_ID"
+          pnpm exec cf workers versions create --prebuilt --mode staging --preview-alias "$PREVIEW_ALIAS"
 
       - name: Comment on preview
         if: success()

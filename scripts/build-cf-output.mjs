@@ -24,7 +24,11 @@ if (source.main !== "entry.mjs" || !source.name) {
 
 const env = {}
 for (const item of source.d1_databases ?? []) {
-  env[item.binding] = { type: "d1", name: item.database_name }
+  env[item.binding] = {
+    type: "d1",
+    name: item.database_name,
+    ...(item.database_id ? { id: item.database_id } : {}),
+  }
 }
 for (const item of source.r2_buckets ?? []) {
   env[item.binding] = { type: "r2", name: item.bucket_name }

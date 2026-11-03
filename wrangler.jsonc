@@ -21,9 +21,16 @@
       "workers_dev": true,
       "preview_urls": true,
       "routes": [],
-      "vars": { "EMDASH_SITE_URL": "https://blog-staging.sh1ma.workers.dev" },
+      "vars": {
+        "EMDASH_SITE_URL": "https://blog-staging.sh1ma.workers.dev",
+        "EMDASH_ADMIN_DISABLED": "1",
+      },
       "d1_databases": [
-        { "binding": "DB", "database_name": "blog-emdash-staging" },
+        {
+          "binding": "DB",
+          "database_name": "blog-emdash-staging",
+          "database_id": "dd29ce39-7487-452e-8888-501c55cbf6b9",
+        },
       ],
       "r2_buckets": [
         { "binding": "MEDIA", "bucket_name": "blog-emdash-media-staging" },
