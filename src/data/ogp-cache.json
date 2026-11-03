@@ -1,0 +1,146 @@
+{
+  "https://github.blog/changelog/2021-09-20-github-actions-ephemeral-self-hosted-runners-new-webhooks-for-auto-scaling/": {
+    "fetchedAt": 1786416340656,
+    "data": {
+      "url": "https://github.blog/changelog/2021-09-20-github-actions-ephemeral-self-hosted-runners-new-webhooks-for-auto-scaling/",
+      "title": "GitHub Actions: Ephemeral self-hosted runners & new webhooks for auto-scaling - GitHub Changelog",
+      "description": "GitHub Actions now supports ephemeral (i.e. single job) self-hosted runners and a new workflow_job webhook to make autoscaling your runners easier. After a job is run, ephemeral runners are automatically&hellip;",
+      "image": "https://github.blog/wp-content/themes/github-2021-child/dist/img/social-v3-improvements.jpg",
+      "siteName": "The GitHub Blog",
+      "favicon": "https://www.google.com/s2/favicons?domain=github.blog&sz=64",
+      "domain": "github.blog"
+    }
+  },
+  "https://docs.github.com/en/billing/reference/actions-runner-pricing": {
+    "fetchedAt": 1786416340656,
+    "data": {
+      "url": "https://docs.github.com/en/billing/reference/actions-runner-pricing",
+      "title": "Actions runner pricing - GitHub Docs",
+      "description": "Reference information for calculating the cost of using different GitHub-hosted runners.",
+      "image": "https://docs.github.com/assets/cb-345/images/social-cards/billing.png",
+      "siteName": "GitHub Docs",
+      "favicon": "https://www.google.com/s2/favicons?domain=docs.github.com&sz=64",
+      "domain": "docs.github.com"
+    }
+  },
+  "https://docs.github.com/en/actions/concepts/runners/self-hosted-runners": {
+    "fetchedAt": 1786416340655,
+    "data": {
+      "url": "https://docs.github.com/en/actions/concepts/runners/self-hosted-runners",
+      "title": "Self-hosted runners - GitHub Docs",
+      "description": "You can host your own runners and customize the environment used to run jobs in your GitHub Actions workflows.",
+      "image": "https://docs.github.com/assets/cb-345/images/social-cards/actions.png",
+      "siteName": "GitHub Docs",
+      "favicon": "https://www.google.com/s2/favicons?domain=docs.github.com&sz=64",
+      "domain": "docs.github.com"
+    }
+  },
+  "https://docs.github.com/en/actions/reference/runners/self-hosted-runners#ephemeral-runners-for-autoscaling": {
+    "fetchedAt": 1786416340656,
+    "data": {
+      "url": "https://docs.github.com/en/actions/reference/runners/self-hosted-runners#ephemeral-runners-for-autoscaling",
+      "title": "Self-hosted runners reference - GitHub Docs",
+      "description": "Find information about setting up and using self-hosted runners.",
+      "image": "https://docs.github.com/assets/cb-345/images/social-cards/actions.png",
+      "siteName": "GitHub Docs",
+      "favicon": "https://www.google.com/s2/favicons?domain=docs.github.com&sz=64",
+      "domain": "docs.github.com"
+    }
+  },
+  "https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories": {
+    "fetchedAt": 1786416340656,
+    "data": {
+      "url": "https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories",
+      "title": "GitHub-hosted runners reference - GitHub Docs",
+      "description": "Find information about GitHub-hosted runners, including their specifications and customization options.",
+      "image": "https://docs.github.com/assets/cb-345/images/social-cards/actions.png",
+      "siteName": "GitHub Docs",
+      "favicon": "https://www.google.com/s2/favicons?domain=docs.github.com&sz=64",
+      "domain": "docs.github.com"
+    }
+  },
+  "https://blog.cloudflare.com/email-for-agents/": {
+    "fetchedAt": 1786416340622,
+    "data": {
+      "url": "https://blog.cloudflare.com/email-for-agents/",
+      "title": "Email for agents - Cloudflare Email Service now in public beta",
+      "description": "Agents are becoming multi-channel. That means making them available wherever your users already are — including the inbox. Today, Cloudflare Email Service enters public beta with the infrastructure layer to make that easy: send, receive, and process email natively from your agents.",
+      "image": "https://blog.cloudflare.com/_emdash/api/media/file/01KW460Y31H4SCASMH4X5JRAYG.png",
+      "siteName": "Cloudflare Blog",
+      "favicon": "https://www.google.com/s2/favicons?domain=blog.cloudflare.com&sz=64",
+      "domain": "blog.cloudflare.com"
+    }
+  },
+  "https://developers.cloudflare.com/workers/platform/pricing/#containers": {
+    "fetchedAt": 1786416340656,
+    "data": {
+      "url": "https://developers.cloudflare.com/workers/platform/pricing/#containers",
+      "title": "Pricing",
+      "description": "Workers plans and pricing information.",
+      "image": "https://developers.cloudflare.com/og-docs.png",
+      "siteName": "Cloudflare Docs",
+      "favicon": "https://www.google.com/s2/favicons?domain=developers.cloudflare.com&sz=64",
+      "domain": "developers.cloudflare.com"
+    }
+  },
+  "https://developers.cloudflare.com/containers/pricing/": {
+    "fetchedAt": 1786416340656,
+    "data": {
+      "url": "https://developers.cloudflare.com/containers/pricing/",
+      "title": "Pricing",
+      "description": "Billing rates for Containers vCPU, memory, disk, and network egress, including included usage on the Workers Paid plan.",
+      "image": "https://developers.cloudflare.com/og-docs.png",
+      "siteName": "Cloudflare Docs",
+      "favicon": "https://www.google.com/s2/favicons?domain=developers.cloudflare.com&sz=64",
+      "domain": "developers.cloudflare.com"
+    }
+  },
+  "https://mise.jdx.dev/environments/secrets/age.html": {
+    "fetchedAt": 1786416340631,
+    "data": {
+      "url": "https://mise.jdx.dev/environments/secrets/age.html",
+      "title": "Direct age Encryption | mise-en-place",
+      "description": "mise-en-place documentation",
+      "image": "https://mise.jdx.dev/android-chrome-512x512.png",
+      "siteName": "mise-en-place",
+      "favicon": "https://www.google.com/s2/favicons?domain=mise.jdx.dev&sz=64",
+      "domain": "mise.jdx.dev"
+    }
+  },
+  "https://github.com/cloudflare/agentic-inbox": {
+    "fetchedAt": 1786416340622,
+    "data": {
+      "url": "https://github.com/cloudflare/agentic-inbox",
+      "title": "GitHub - cloudflare/agentic-inbox: A self-hosted email client with an AI agent, running entirely on Cloudflare Workers",
+      "description": "A self-hosted email client with an AI agent, running entirely on Cloudflare Workers - cloudflare/agentic-inbox",
+      "image": "https://opengraph.githubassets.com/1cb82a736e5072a038e0025e5d05fe02c92b35a92a094ce5f7f2f46a2b69baf3/cloudflare/agentic-inbox",
+      "siteName": "GitHub",
+      "favicon": "https://www.google.com/s2/favicons?domain=github.com&sz=64",
+      "domain": "github.com"
+    }
+  },
+  "https://github.com/sh1ma/try-k3s-on-cf-workers-public": {
+    "fetchedAt": 1786416340617,
+    "data": {
+      "url": "https://github.com/sh1ma/try-k3s-on-cf-workers-public",
+      "title": "GitHub - sh1ma/try-k3s-on-cf-workers-public: Running k3s on Cloudflare Workers Containers",
+      "description": "Running k3s on Cloudflare Workers Containers. Contribute to sh1ma/try-k3s-on-cf-workers-public development by creating an account on GitHub.",
+      "image": "https://opengraph.githubassets.com/9ea798152d2f3850b3352488d3f1b0c405b64a2947a80289c7a9e2d01c891fb3/sh1ma/try-k3s-on-cf-workers-public",
+      "siteName": "GitHub",
+      "favicon": "https://www.google.com/s2/favicons?domain=github.com&sz=64",
+      "domain": "github.com"
+    }
+  },
+  "https://github.com/actions/runner/releases": {
+    "fetchedAt": 1786416340657,
+    "data": {
+      "url": "https://github.com/actions/runner/releases",
+      "title": "Releases · actions/runner",
+      "description": "The Runner for GitHub Actions :rocket:. Contribute to actions/runner development by creating an account on GitHub.",
+      "image": "https://opengraph.githubassets.com/427a063497418be1381ddb7d2653cbc320465da6992ad8e694d6488512c18ca6/actions/runner",
+      "siteName": "GitHub",
+      "favicon": "https://www.google.com/s2/favicons?domain=github.com&sz=64",
+      "domain": "github.com"
+    }
+  }
+}

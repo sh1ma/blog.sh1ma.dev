@@ -1,0 +1,28 @@
+---
+import { ArticleCard } from "./ArticleCard/ArticleCard"
+import { listBlogPosts, readingTime, type BlogLocale } from "../lib/blog-posts"
+
+interface Props { locale: BlogLocale }
+const { locale } = Astro.props
+const posts = await listBlogPosts(locale)
+---
+
+<main class="mx-auto w-full max-w-3xl px-4 py-8" lang={locale}>
+  <div class="mb-12">
+    <h2 class="mb-2 text-4xl font-bold tracking-tight text-text-primary">Latest Writings</h2>
+  </div>
+  <div class="flex flex-col gap-6">
+    {posts.map((post) => (
+      <ArticleCard
+        id={post.slug}
+        title={post.title}
+        description={post.description}
+        thumbnail={post.thumbnail}
+        publishedAt={post.published_date}
+        readingTime={readingTime(post.markdown)}
+        tags={post.tags}
+        locale={locale}
+      />
+    ))}
+  </div>
+</main>

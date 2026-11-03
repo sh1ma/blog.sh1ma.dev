@@ -1,5 +1,3 @@
-import { Link } from "@tanstack/react-router"
-
 type TagProps = {
   label: string
   href?: string
@@ -24,12 +22,12 @@ export const Tag = ({ label, href, size = "md" }: TagProps) => {
 
   if (href) {
     return (
-      <Link
-        to={href}
+      <a
+        href={href}
         className={`${baseClasses} hover:bg-brand-primary-light/30`}
       >
         {label}
-      </Link>
+      </a>
     )
   }
 

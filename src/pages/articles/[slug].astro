@@ -1,0 +1,15 @@
+---
+import { decodeSlug } from "emdash"
+import ArticleView from "../../components/ArticleView.astro"
+import BlogLayout from "../../layouts/BlogLayout.astro"
+import { getBlogPost } from "../../lib/blog-posts"
+
+const slug = decodeSlug(Astro.params.slug)
+const post = slug ? await getBlogPost(slug, "ja") : null
+if (!post) return Astro.rewrite("/404")
+const translation = slug ? await getBlogPost(slug, "en") : null
+const translationHref = translation ? `/en/articles/${encodeURIComponent(translation.slug)}` : undefined
+---
+<BlogLayout title={post.title} description={post.description || "ブログ記事"} locale="ja" translationHref={translationHref}>
+  <ArticleView post={post} locale="ja" translationHref={translationHref} />
+</BlogLayout>

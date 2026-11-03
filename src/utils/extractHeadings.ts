@@ -1,4 +1,4 @@
-import type { TocItem } from "@/components/TableOfContents/TableOfContents"
+import type { TocItem } from "../components/TableOfContents/TableOfContents"
 
 export function extractHeadings(html: string): TocItem[] {
   const headingRegex = /<h([2-4])([^>]*)>([\s\S]*?)<\/h\1>/g

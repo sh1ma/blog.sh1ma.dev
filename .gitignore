@@ -14,6 +14,11 @@
 
 # Vite build output
 /dist
+/.astro
+/.wrangler
+/data.db*
+/uploads
+/.env
 
 # generated route tree
 src/routeTree.gen.ts
@@ -38,6 +43,7 @@ yarn-error.log*
 
 
 .content-collections
+.emdash
 .cloudflare
 
 analyze

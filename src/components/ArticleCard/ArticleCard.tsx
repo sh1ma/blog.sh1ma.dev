@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router"
 import { LuCalendar, LuClock, LuImageOff } from "react-icons/lu"
 import { Tag } from "../Tag/Tag"
 
@@ -10,6 +9,7 @@ type ArticleCardProps = {
   publishedAt: string
   readingTime: number
   tags?: string[]
+  locale?: "ja" | "en"
 }
 
 export const ArticleCard = ({
@@ -20,9 +20,12 @@ export const ArticleCard = ({
   publishedAt,
   readingTime,
   tags,
+  locale = "ja",
 }: ArticleCardProps) => {
   return (
-    <Link to="/articles/$slug" params={{ slug: id }}>
+    <a
+      href={`${locale === "en" ? "/en" : ""}/articles/${encodeURIComponent(id)}`}
+    >
       <article className="group flex items-center gap-4 rounded-xl bg-bg-surface p-4 shadow-soft transition-all hover:-translate-y-1 hover:shadow-hover">
         <div className="size-24 shrink-0 overflow-hidden rounded-lg">
           {thumbnail ? (
@@ -69,11 +72,14 @@ export const ArticleCard = ({
             <span className="size-1 rounded-full bg-gray-300" />
             <span className="flex items-center gap-1">
               <LuClock size={16} />
-              <span>{readingTime}分</span>
+              <span>
+                {readingTime}
+                {locale === "en" ? " min" : "分"}
+              </span>
             </span>
           </div>
         </div>
       </article>
-    </Link>
+    </a>
   )
 }

@@ -1,0 +1,80 @@
+---
+import { LuCalendar, LuClock } from "react-icons/lu"
+import { TableOfContents } from "./TableOfContents/TableOfContents"
+import { Tag } from "./Tag/Tag"
+import { TranslationNotice } from "./TranslationNotice/TranslationNotice"
+import type { BlogLocale, BlogPostData } from "../lib/blog-posts"
+import { readingTime } from "../lib/blog-posts"
+import { extractHeadings } from "../utils/extractHeadings"
+import { renderMarkdown } from "../lib/render-markdown"
+
+interface Props {
+  post: BlogPostData
+  locale: BlogLocale
+  translationHref?: string
+}
+const { post, locale, translationHref } = Astro.props
+const html = await renderMarkdown(post.markdown)
+const headings = extractHeadings(html)
+---
+
+<article class="mx-auto w-full max-w-3xl px-4 py-8" lang={locale}>
+  <header class="mb-10 border-b border-gray-200 pb-6">
+    {post.tags && post.tags.length > 0 && (
+      <div class="mb-4 flex gap-2">
+        {post.tags.map((tag) => <Tag label={tag} size="md" />)}
+      </div>
+    )}
+    <h1 class="mb-4 text-4xl font-extrabold leading-tight tracking-tight text-text-primary">{post.title}</h1>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-medium text-text-muted">
+      <span class="flex items-center gap-1"><LuCalendar size={16} />{post.published_date}</span>
+      <span class="size-1 rounded-full bg-gray-300"></span>
+      <span class="flex items-center gap-1"><LuClock size={16} />{readingTime(post.markdown)}{locale === "en" ? " min" : "分"}</span>
+    </div>
+  </header>
+
+  {translationHref && (
+    <TranslationNotice targetLocale={locale === "ja" ? "en" : "ja"} href={translationHref} />
+  )}
+  <TableOfContents headings={headings} initialOpen={false} />
+  <main class="prose prose-lg max-w-none text-text-primary">
+    <div
+      class="prose prose-lg prose-headings:relative prose-headings:font-bold prose-h2:border-b prose-h2:border-primary-default prose-h2:pb-heading-bottom prose-a:text-primary-default prose-code:before:content-none prose-code:after:content-none prose-li:marker:text-black"
+      set:html={html}
+    />
+  </main>
+</article>
+
+<script>
+  const root = document.querySelector<HTMLElement>("article main.prose")
+  if (root) {
+    for (const figure of root.querySelectorAll<HTMLElement>("figure[data-rehype-pretty-code-figure]")) {
+      const button = document.createElement("button")
+      button.type = "button"
+      button.className = "copy-btn"
+      button.textContent = "Copy"
+      button.setAttribute("aria-label", "コードをコピー")
+      button.addEventListener("click", async () => {
+        const code = figure.querySelector("code")?.textContent ?? ""
+        try {
+          await navigator.clipboard.writeText(code)
+          button.textContent = "Copied!"
+          button.dataset.copied = "true"
+        } catch {
+          button.textContent = "Failed"
+        }
+        window.setTimeout(() => {
+          button.textContent = "Copy"
+          delete button.dataset.copied
+        }, 1500)
+      })
+      figure.appendChild(button)
+    }
+    if (root.querySelector(".twitter-tweet")) {
+      const widget = document.createElement("script")
+      widget.src = "https://platform.twitter.com/widgets.js"
+      widget.async = true
+      document.body.appendChild(widget)
+    }
+  }
+</script>

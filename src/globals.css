@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "./syntax-highlight.css";
-@import "katex/dist/katex.min.css";
 @config "../tailwind.config.ts";
 
 :root {
@@ -76,7 +75,7 @@ body {
     sans-serif;
 }
 
-.link-card {
+.prose a.link-card {
   display: flex;
   align-items: stretch;
   gap: 1rem;
@@ -86,14 +85,14 @@ body {
   border-radius: 0.5rem;
   background: var(--bg-surface);
   color: var(--text-primary);
-  text-decoration: none !important;
+  text-decoration: none;
   overflow: hidden;
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
   min-height: 140px;
 }
-.link-card:hover {
+.prose a.link-card:hover {
   border-color: var(--border-brand);
   box-shadow: 0 4px 12px rgba(81, 79, 201, 0.12);
 }
@@ -132,10 +131,10 @@ body {
   font-size: 0.75rem;
   color: var(--text-muted);
 }
-.link-card__favicon {
+.prose img.link-card__favicon {
   width: 16px;
   height: 16px;
-  margin: 0 !important;
+  margin: 0;
   display: inline-block;
 }
 .link-card__thumb {
@@ -149,11 +148,11 @@ body {
   justify-content: center;
   overflow: hidden;
 }
-.link-card__thumb img {
+.prose .link-card__thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  margin: 0 !important;
+  margin: 0;
 }
 
 @media (max-width: 640px) {
@@ -163,8 +162,8 @@ body {
   }
 }
 
-.twitter-tweet {
-  margin: 1.25rem auto !important;
+.prose .twitter-tweet {
+  margin: 1.25rem auto;
 }
 
 /* GFM Alert (Notion 風コールアウト) */

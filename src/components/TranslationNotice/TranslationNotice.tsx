@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router"
 import { LuLanguages } from "react-icons/lu"
 
 type TranslationNoticeProps = {
@@ -29,12 +28,12 @@ export const TranslationNotice = ({
     >
       <LuLanguages size={18} className="shrink-0 text-brand-primary" />
       <span className="flex-1">{text}</span>
-      <Link
-        to={href}
+      <a
+        href={href}
         className="whitespace-nowrap font-medium text-brand-primary hover:underline"
       >
         {linkText}
-      </Link>
+      </a>
     </div>
   )
 }
