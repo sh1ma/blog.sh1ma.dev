@@ -9,10 +9,14 @@ interface Props {
   description: string
   locale: "ja" | "en"
   translationHref?: string
+  ogImage?: string
+  ogType?: "article" | "website"
 }
 
-const { title, description, locale, translationHref } = Astro.props
+const { title, description, locale, translationHref, ogImage = "/anon-icon.png", ogType = "website" } = Astro.props
 const pathname = Astro.url.pathname
+const canonical = new URL(pathname, Astro.url.origin).href
+const imageUrl = new URL(ogImage, Astro.url.origin).href
 ---
 
 <!doctype html>
@@ -23,7 +27,18 @@ const pathname = Astro.url.pathname
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.png" />
     <link rel="alternate" type="application/rss+xml" title="blog.sh1ma.dev" href={locale === "en" ? "/en/feed" : "/feed"} />
-    <link rel="canonical" href={Astro.url.href} />
+    <link rel="canonical" href={canonical} />
+    {translationHref && <link rel="alternate" hreflang={locale} href={canonical} />}
+    {translationHref && <link rel="alternate" hreflang={locale === "ja" ? "en" : "ja"} href={new URL(translationHref, Astro.url.origin).href} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content={ogType === "article" ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
     <title>{title}</title>
   </head>
   <body>

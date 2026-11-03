@@ -14,6 +14,8 @@ pnpm dev
 
 `src/markdown/posts/` は移行元の記録として残している。`pnpm build:seed` はそこから初回セットアップ用 seed を再生成する。運用開始後の記事編集は EmDash の D1 データベースが正本で、seed の再生成や再デプロイは公開済み DB の記事を上書きしない。
 
+既存 48 記事の OGP 画像は旧サイトの `/og/` から `scripts/import-legacy-ogp.mjs` で取得して `public/og/` に保持する。記事の `og:*` と `twitter:*` は現在の EmDash データから出す。新しい記事は `thumbnail` URL を OGP 画像に使い、未設定ならサイトのアイコンを使う。既存記事の画像は旧タイトル入りの静的 PNG なので、タイトルを変更した場合は画像も更新する。
+
 ## 検証
 
 ```sh
