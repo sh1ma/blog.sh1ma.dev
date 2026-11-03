@@ -8,6 +8,8 @@
     "dev": "astro dev",
     "build": "pnpm build:seed && astro build && node scripts/build-cf-output.mjs",
     "build:seed": "node scripts/build-emdash-seed.mjs && biome format --write seed/seed.json",
+    "prepare:d1-import": "pnpm build:seed && python3 scripts/prepare-d1-import.py",
+    "verify:site": "node scripts/verify-emdash-site.mjs",
     "preview": "astro preview",
     "deploy": "pnpm build && cf deploy --prebuilt --mode production",
     "versions:upload": "pnpm build && cf workers versions create --prebuilt --mode production",

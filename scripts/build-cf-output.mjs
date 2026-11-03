@@ -46,7 +46,14 @@ if (process.env.SITE_URL) {
   env.EMDASH_SITE_URL = { type: "text", value: siteUrl.origin }
 }
 
-for (const binding of ["DB", "MEDIA", "SESSION", "IMAGES", "ASSETS"]) {
+for (const binding of [
+  "DB",
+  "MEDIA",
+  "SESSION",
+  "IMAGES",
+  "ASSETS",
+  "EMDASH_SITE_URL",
+]) {
   if (!env[binding])
     throw new Error(`必要な Worker binding がありません: ${binding}`)
 }

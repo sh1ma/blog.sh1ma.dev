@@ -30,4 +30,31 @@ E2E はテスト専用のローカル SQLite に seed を入れ、Node アダプ
 
 Astro アダプタが `wrangler.jsonc` から生成する Worker 設定を cf CLI 用 Build Output に変換し、`cf deploy --prebuilt` で公開する。本番 Worker は `blog`、ステージングは `blog-staging`。D1 と R2 は環境ごとに別名で定義している。ステージングの自動デプロイと PR プレビューは、専用 CMS リソースの準備後に GitHub Variables の `EMDASH_STAGING_READY` / `EMDASH_PREVIEW_READY` を `true` にすると有効になる。
 
-初回公開時は EmDash のセットアップで記事データを取り込み、管理者アカウントと passkey を作成する。`EMDASH_ENCRYPTION_KEY` は cf CLI の Worker Secret に保存し、D1 バックアップとは別に保管する。公開中の `blog.sh1ma.dev` を切り替える前に、全記事 URL、RSS、サイトマップと管理画面を確認する。
+本番の既存 Worker を切り替える前に、同じ `blog` Worker の版 URL で新しい D1 を初期化し、記事を投入する。cf 認証と配備の承認を得てから、同じビルド成果物に対して順番に実行する。
+
+```sh
+pnpm build
+pnpm exec cf workers versions create --prebuilt --mode production --preview-alias emdash-migrate
+```
+
+`https://emdash-migrate-blog.sh1ma.workers.dev/` を一度開いて EmDash のマイグレーションとスキーマ作成を完了させる。版 URL の `/_emdash/` は Worker が 403 で拒否する。`cf d1 list --name blog-emdash` で新しい DB の ID を確認し、`ec_posts` が空であることを確認してから記事を投入する。
+
+```sh
+pnpm prepare:d1-import
+export EMDASH_D1_ID="REPLACE_WITH_D1_UUID"
+pnpm exec cf d1 query "$EMDASH_D1_ID" --sql 'SELECT COUNT(*) AS count FROM ec_posts'
+pnpm exec cf d1 query "$EMDASH_D1_ID" --batch @.emdash/d1-import/posts.batch.json
+pnpm exec cf d1 query "$EMDASH_D1_ID" --sql 'SELECT locale, COUNT(*) AS count FROM ec_posts GROUP BY locale'
+pnpm verify:site https://emdash-migrate-blog.sh1ma.workers.dev
+```
+
+投入前は 0 件、投入後は `ja` と `en` が各 24 件であることを確認する。`prepare:d1-import` は現在の EmDash による空 DB と 48 記事入り DB を比較し、記事・リビジョンの SQL 144 文を生成してローカル DB に再適用してからファイルを出す。想定外のテーブル差分や外部キー違反があれば中断する。
+
+版 URL 上で記事を確認してから、同じ成果物を本番に配備する。`EMDASH_ENCRYPTION_KEY` を含む保護された dotenv ファイルを `--secrets-file` に渡し、キーは D1 バックアップとは別に保管する。
+
+```sh
+pnpm exec cf deploy --prebuilt --mode production --secrets-file /path/to/protected-env-file
+pnpm verify:site https://blog.sh1ma.dev
+```
+
+本番ドメインの `/_emdash/admin/` で管理者と passkey を作成する。記事は事前投入済みなので、セットアップ画面では **Include sample content を外す**。配備前のサイト・D1・R2 に変更が必要な段階では、公開中の Worker はそのままにする。
