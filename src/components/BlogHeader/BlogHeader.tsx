@@ -1,5 +1,3 @@
-import { Link, useLocation } from "@tanstack/react-router"
-import { allArticles } from "content-collections"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LuLink as LinkIcon, LuChevronLeft } from "react-icons/lu"
 
@@ -20,7 +18,10 @@ type LanguageTarget = {
 const EN_LABEL = "Read in English"
 const JA_LABEL = "日本語版はこちら"
 
-const resolveLanguageTarget = (rawPath: string): LanguageTarget | null => {
+const resolveLanguageTarget = (
+  rawPath: string,
+  translationHref?: string,
+): LanguageTarget | null => {
   const pathname =
     rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath
   if (pathname === "/") {
@@ -37,25 +38,26 @@ const resolveLanguageTarget = (rawPath: string): LanguageTarget | null => {
   }
   const enArticle = pathname.match(/^\/en\/articles\/(.+?)\/?$/)
   if (enArticle) {
-    const slug = enArticle[1]
-    const hasJa = allArticles.some((p) => p.id === slug && p.locale === "ja")
-    return hasJa
-      ? { href: `/articles/${slug}`, label: JA_LABEL, lang: "ja" }
+    return translationHref
+      ? { href: translationHref, label: JA_LABEL, lang: "ja" }
       : null
   }
   const jaArticle = pathname.match(/^\/articles\/(.+?)\/?$/)
   if (jaArticle) {
-    const slug = jaArticle[1]
-    const hasEn = allArticles.some((p) => p.id === slug && p.locale === "en")
-    return hasEn
-      ? { href: `/en/articles/${slug}`, label: EN_LABEL, lang: "en" }
+    return translationHref
+      ? { href: translationHref, label: EN_LABEL, lang: "en" }
       : null
   }
   return null
 }
 
-export const BlogHeader = () => {
-  const pathname = useLocation({ select: (loc) => loc.pathname })
+export const BlogHeader = ({
+  pathname = "/",
+  translationHref,
+}: {
+  pathname?: string
+  translationHref?: string
+}) => {
   const [scrolled, setScrolled] = useState(false)
   const [visible, setVisible] = useState(true)
   const [userExpanded, setUserExpanded] = useState(false)
@@ -166,7 +168,7 @@ export const BlogHeader = () => {
     return `${base} border-transparent font-medium text-text-muted hover:text-brand-primary`
   }
 
-  const languageTarget = resolveLanguageTarget(pathname)
+  const languageTarget = resolveLanguageTarget(pathname, translationHref)
 
   return (
     <div
@@ -189,24 +191,24 @@ export const BlogHeader = () => {
           >
             {isEnglish ? (
               <>
-                <Link to="/en" className={getMobileLinkClassName("/en")}>
+                <a href="/en" className={getMobileLinkClassName("/en")}>
                   Articles
-                </Link>
-                <Link
-                  to="/en/about"
+                </a>
+                <a
+                  href="/en/about"
                   className={getMobileLinkClassName("/en/about")}
                 >
                   About
-                </Link>
+                </a>
               </>
             ) : (
               <>
-                <Link to="/" className={getMobileLinkClassName("/")}>
+                <a href="/" className={getMobileLinkClassName("/")}>
                   Articles
-                </Link>
-                <Link to="/about" className={getMobileLinkClassName("/about")}>
+                </a>
+                <a href="/about" className={getMobileLinkClassName("/about")}>
                   About
-                </Link>
+                </a>
               </>
             )}
             {languageTarget && (
@@ -232,7 +234,7 @@ export const BlogHeader = () => {
               isCompact ? "pointer-events-none opacity-0" : "opacity-100"
             }`}
           >
-            <Link to="/" className="flex items-center gap-3">
+            <a href="/" className="flex items-center gap-3">
               <img
                 src="/anon-illust.jpeg"
                 alt=""
@@ -241,29 +243,26 @@ export const BlogHeader = () => {
               <div className="whitespace-nowrap text-xl font-bold tracking-tight text-text-primary">
                 blog.<span className="text-brand-primary">sh1ma.dev</span>
               </div>
-            </Link>
+            </a>
 
             <nav className="hidden items-center gap-8 md:flex">
               {isEnglish ? (
                 <>
-                  <Link to="/en" className={getLinkClassName("/en")}>
+                  <a href="/en" className={getLinkClassName("/en")}>
                     Articles
-                  </Link>
-                  <Link
-                    to="/en/about"
-                    className={getLinkClassName("/en/about")}
-                  >
+                  </a>
+                  <a href="/en/about" className={getLinkClassName("/en/about")}>
                     About
-                  </Link>
+                  </a>
                 </>
               ) : (
                 <>
-                  <Link to="/" className={getLinkClassName("/")}>
+                  <a href="/" className={getLinkClassName("/")}>
                     Articles
-                  </Link>
-                  <Link to="/about" className={getLinkClassName("/about")}>
+                  </a>
+                  <a href="/about" className={getLinkClassName("/about")}>
                     About
-                  </Link>
+                  </a>
                 </>
               )}
               {languageTarget && (

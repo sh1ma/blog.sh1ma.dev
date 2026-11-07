@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-[blog.sh1ma.dev](https://blog.sh1ma.dev) で公開されている個人ブログのソースコード。Cloudflare Workers にデプロイされている静的サイト。
+[blog.sh1ma.dev](https://blog.sh1ma.dev) で公開されている個人ブログのソースコード。Astro と EmDash によるサーバーレンダリングのサイトを Cloudflare Workers にデプロイする。
 
 ## 絶対に守るべきルール
 
-- **一度公開済みの記事の URL は絶対に変えてはいけない**。これは最重要事項。`src/markdown/posts/` 配下の公開済み記事のファイル名 (slug) やディレクトリ構成を変更する行為、およびルーティング設定 (`src/pages/` など) を変えて既存記事のパスが変わる行為は禁止。誤字修正・タイトル変更等で URL を変えたくなっても、既存 URL は必ず維持する。どうしても URL を変える必要があると判断した場合は、勝手に進めず必ずユーザに ask する。
+- **一度公開済みの記事の URL は絶対に変えてはいけない**。これは最重要事項。既存の `/articles/:slug` と `/en/articles/:slug` を維持する。`src/markdown/posts/` に残す移行元のファイル名 (slug) や `seed/seed.json` の slug、`src/pages/` のルーティングを変更して既存記事のパスが変わる行為は禁止。どうしても URL を変える必要がある場合は必ずユーザに ask する。
 - **常に日本語で応答する**。
 - **依存追加は必ず `pnpm add` / `pnpm add -D` を使う**。`package.json` を直接編集して依存を書き込むのは禁止。
 - **Lint 無効化コメント (`biome-ignore`, `eslint-disable` 等) は書かない**。エラーは黙らせず、コードを直して解消する。
@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **タスクにまつわる情報を集める**。既存コード、関連する docs / スキル、過去の PR / commit を確認する。
 3. **開発する**。バグ修正は先に再現テストを書き、一度 Failed することを確認してから直す。
 4. **PR 作成前チェックを通す**。**変更範囲に関わらず `pnpm check` (format/lint) は必ず流す**。
-   - **ブログの動作に影響するコード** (`src/`, `scripts/`, `content-collections.ts`, `vite.config.ts`, `cloudflare.config.ts`, `package.json` の deps, ワークフローなど) を変更した場合: 加えて `pnpm typecheck` も通ること。
+   - **ブログの動作に影響するコード** (`src/`, `scripts/`, `seed/`, `astro.config.mjs`, `wrangler.jsonc`, `package.json` の deps, ワークフローなど) を変更した場合: 加えて `pnpm typecheck` も通ること。
    - **ブログの動作に関係ないファイル** (`.claude/`, `CLAUDE.md`, `README.md`, `docs/`, `dev-assets/` など) しか変更していない場合: `pnpm check` のみで良い。typecheck はスキップ可。
    - **E2E / VRT は PR では skip しているので、ローカルで事前に実行する必要はない**。手元で E2E を触りたい場面 (E2E 自体の変更・デバッグ) だけ任意で流す。skip の状態は `.github/workflows/` の各ワークフローの job の `if` を見る。
    - 自動修正できるものは `pnpm check:fix`。
@@ -37,8 +37,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `.github/pull_request_template.md` — PR テンプレート本体。
 - `README.md` — 公開向けの最小情報。
 - `package.json` の `scripts` — 使えるコマンド一覧の一次ソース (`pnpm run` で列挙可能)。
-- `cloudflare.config.ts` / `.github/workflows/` — Cloudflare へのデプロイ設定と CI の一次ソース。
-- `content-collections.ts` — 記事の Markdown 変換パイプラインの一次ソース。
+- `astro.config.mjs` / `wrangler.jsonc` / `cloudflare.config.ts` / `.github/workflows/` — EmDash と Cloudflare への設定、cf CLI による配備と CI の一次ソース。
+- `src/live.config.ts` / `src/lib/render-markdown.ts` — EmDash の記事取得と Markdown 表示の一次ソース。
+- `scripts/build-emdash-seed.mjs` / `seed/seed.json` — 既存 48 記事を初回セットアップへ移すための一次ソース。
 
 技術詳細 (フレームワーク構成、ビルドパイプライン、デプロイフロー等) はこのファイルに書かず、上記の一次ソースを直接読む。
 

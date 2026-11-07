@@ -14,13 +14,13 @@ on:
       - "playwright.config.ts"
       - "package.json"
       - "pnpm-lock.yaml"
-      - "index.html"
-      - "scripts/**"
-      - "vite.config.ts"
-      - "content-collections.ts"
-      - "tailwind.config.ts"
-      - "postcss.config.cjs"
+      - "astro.config.mjs"
+      - "astro.test.config.mjs"
       - "cloudflare.config.ts"
+      - "wrangler.jsonc"
+      - "seed/**"
+      - "scripts/**"
+      - "tailwind.config.ts"
       - "tsconfig*.json"
       - ".github/workflows/vrt.yaml"
       - ".github/actions/setup-playwright/action.yml"
@@ -101,9 +101,8 @@ jobs:
             file="${name}-chromium-linux.png"
             out="e2e/vrt.spec.ts-snapshots/${file}"
             # -linuxサフィックス付きファイルを試し、なければサフィックスなしをダウンロード
-            # cf r2 objects get は本文を stdout に書くため、失敗時はリダイレクトで生じた空ファイルを消す
-            pnpm exec cf r2 objects get baselines/${file} --bucket-name ${{ env.R2_BUCKET }} > "$out" || \
-              pnpm exec cf r2 objects get baselines/${name}-chromium.png --bucket-name ${{ env.R2_BUCKET }} > "$out" || \
+            pnpm exec cf r2 objects get "baselines/${file}" --bucket-name "${{ env.R2_BUCKET }}" > "$out" || \
+              pnpm exec cf r2 objects get "baselines/${name}-chromium.png" --bucket-name "${{ env.R2_BUCKET }}" > "$out" || \
               { rm -f "$out"; echo "Baseline ${name} not found"; }
           done
 
@@ -124,7 +123,7 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || 'manual' }}
           RUN_ID=${{ github.run_id }}
-          # cf r2 objects put は --content-type 未指定だと application/octet-stream になるため、
+          # --content-type 未指定だと application/octet-stream になるため、
           # 公開URLからブラウザで閲覧できるよう拡張子から Content-Type を決める
           content_type() {
             case "$1" in
@@ -146,7 +145,7 @@ jobs:
             # playwright-reportディレクトリ内のすべてのファイルをR2にアップロード
             find playwright-report -type f | while read file; do
               key="${file#playwright-report/}"
-              pnpm exec cf r2 objects put reports/pr-${PR_NUM}/run-${RUN_ID}/$key --bucket-name ${{ env.R2_BUCKET }} --file "$file" --content-type "$(content_type "$file")"
+              pnpm exec cf r2 objects put "reports/pr-${PR_NUM}/run-${RUN_ID}/${key}" --bucket-name "${{ env.R2_BUCKET }}" --file "$file" --content-type "$(content_type "$file")"
             done
           fi
 
@@ -158,7 +157,7 @@ jobs:
             # スナップショットをR2にアップロード
             find e2e/vrt.spec.ts-snapshots -type f -name "*.png" | while read file; do
               filename=$(basename "$file")
-              pnpm exec cf r2 objects put snapshots/pr-${PR_NUM}/$filename --bucket-name ${{ env.R2_BUCKET }} --file "$file" --content-type image/png
+              pnpm exec cf r2 objects put "snapshots/pr-${PR_NUM}/${filename}" --bucket-name "${{ env.R2_BUCKET }}" --file "$file" --content-type image/png
             done
           fi
 
@@ -179,7 +178,7 @@ jobs:
                 FILENAME=$(basename "$diff")
                 TESTNAME=$(dirname "$diff" | xargs basename)
                 # test-resultsディレクトリもR2にアップロード
-                pnpm exec cf r2 objects put reports/pr-${PR_NUM}/run-${RUN_ID}/screenshots/${TESTNAME}-${FILENAME} --bucket-name ${{ env.R2_BUCKET }} --file "$diff" --content-type image/png
+                pnpm exec cf r2 objects put "reports/pr-${PR_NUM}/run-${RUN_ID}/screenshots/${TESTNAME}-${FILENAME}" --bucket-name "${{ env.R2_BUCKET }}" --file "$diff" --content-type image/png
                 DIFF_IMAGES="${DIFF_IMAGES}- ![${TESTNAME}](${{ env.R2_PUBLIC_URL }}/reports/pr-${PR_NUM}/run-${RUN_ID}/screenshots/${TESTNAME}-${FILENAME})\n"
               fi
             done

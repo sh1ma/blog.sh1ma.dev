@@ -36,5 +36,8 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Check EmDash migrations on production D1
+        run: pnpm exec emdash migrate --check --wrangler-config wrangler.jsonc --account-id "$CLOUDFLARE_ACCOUNT_ID"
+
       - name: Deploy to production
         run: pnpm exec cf deploy --prebuilt --mode production

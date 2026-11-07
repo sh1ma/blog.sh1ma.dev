@@ -1,10 +1,8 @@
-import { useLocation } from "@tanstack/react-router"
 import { LuPenLine } from "react-icons/lu"
 import { SiGithub, SiRss } from "react-icons/si"
 
-export const Footer = () => {
+export const Footer = ({ pathname = "/" }: { pathname?: string }) => {
   const currentYear = new Date().getFullYear()
-  const { pathname } = useLocation()
   const isEnglish = pathname === "/en" || pathname.startsWith("/en/")
 
   return (
