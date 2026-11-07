@@ -7,12 +7,23 @@
   "workers_dev": true,
   "preview_urls": true,
   "routes": [{ "pattern": "blog.sh1ma.dev", "custom_domain": true }],
-  "vars": { "EMDASH_SITE_URL": "https://blog.sh1ma.dev" },
+  "vars": {
+    "EMDASH_SITE_URL": "https://blog.sh1ma.dev",
+  },
   "observability": {
     "enabled": true,
     "traces": { "enabled": true },
   },
-  "d1_databases": [{ "binding": "DB", "database_name": "blog-emdash" }],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "blog-emdash",
+      "database_id": "416f10ff-1fde-44eb-ab0d-121f3a5612a9",
+    },
+  ],
+  "kv_namespaces": [
+    { "binding": "SESSION", "id": "6af0e9957952470b949e44940ec635c0" },
+  ],
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "blog-emdash-media" }],
   "triggers": { "crons": ["* * * * *"] },
   "env": {
