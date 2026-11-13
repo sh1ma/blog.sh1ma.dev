@@ -117,6 +117,9 @@ const seed = {
           type: "text",
           required: true,
           searchable: true,
+          // src/plugins/markdown-editor の WYSIWYG エディタ。プラグインが無い環境では
+          // 管理画面が既定の textarea に戻す。
+          widget: "markdown-editor:wysiwyg",
           options: { rows: 24 },
         },
       ],
