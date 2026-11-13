@@ -26,6 +26,7 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
+    "test:admin-editor": "playwright test -c playwright.admin.config.ts",
     "test:e2e:prepare": "pnpm build:seed && emdash secrets generate --write .env && emdash seed seed/seed.json --database data.db --on-conflict update && astro build --config astro.test.config.mjs",
     "test:e2e:server": "pnpm test:e2e:prepare && HOST=127.0.0.1 PORT=8787 node ./dist/server/entry.mjs"
   },
