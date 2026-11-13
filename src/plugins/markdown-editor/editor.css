@@ -1,0 +1,563 @@
+/*
+ * 管理画面の Markdown エディタ。管理画面 (kumo) の色トークンを使うので
+ * ライト / ダークの切り替えに追従する。本文の見た目はブログの記事 (src/globals.css の
+ * prose、コードは Atom One Dark) に寄せる。
+ */
+.md-editor {
+  --md-border: var(--color-kumo-line, #d4d4d8);
+  --md-surface: var(--color-kumo-base, #fff);
+  --md-muted: var(--color-kumo-recessed, #f4f4f5);
+  --md-text: var(--text-color-kumo-default, #18181b);
+  --md-subtle: var(--text-color-kumo-subtle, #71717a);
+  --md-brand: var(--color-kumo-brand, #514fc9);
+  --md-focus: var(--color-kumo-focus, #514fc9);
+  --md-code-bg: #282c34;
+  --md-code-fg: #abb2bf;
+  --md-mono:
+    ui-monospace, "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", monospace;
+  display: grid;
+  gap: 0.5rem;
+  color: var(--md-text);
+}
+
+.md-editor__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.md-editor__label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.md-editor__required {
+  margin-left: 0.25rem;
+  color: var(--text-color-kumo-danger, #dc2626);
+}
+
+.md-editor__frame {
+  border: 1px solid var(--md-border);
+  border-radius: 0.5rem;
+  background: var(--md-surface);
+}
+
+.md-editor__frame:focus-within {
+  outline: 2px solid var(--md-focus);
+  outline-offset: 1px;
+}
+
+/* ツールバーは長い記事をスクロールしても見えるように上に貼り付ける */
+.md-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.375rem;
+  border-bottom: 1px solid var(--md-border);
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: var(--md-muted);
+}
+
+.md-toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding-right: 0.25rem;
+  margin-right: 0.125rem;
+  border-right: 1px solid var(--md-border);
+}
+
+.md-toolbar__group:last-child {
+  border-right: 0;
+}
+
+.md-toolbar__spacer {
+  flex: 1;
+}
+
+.md-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--md-text);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.md-button:hover:not(:disabled) {
+  background: var(--color-kumo-fill-hover, rgba(0, 0, 0, 0.06));
+}
+
+.md-button:focus-visible {
+  outline: 2px solid var(--md-focus);
+  outline-offset: 1px;
+}
+
+.md-button[aria-pressed="true"] {
+  border-color: var(--md-border);
+  background: var(--md-surface);
+  color: var(--md-brand);
+}
+
+.md-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.md-button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.md-select,
+.md-input,
+.md-textarea {
+  border: 1px solid var(--md-border);
+  border-radius: 0.375rem;
+  background: var(--md-surface);
+  color: var(--md-text);
+  font-size: 0.8125rem;
+}
+
+.md-select {
+  height: 2rem;
+  padding: 0 0.4rem;
+}
+
+.md-input {
+  height: 2rem;
+  padding: 0 0.5rem;
+  min-width: 0;
+}
+
+.md-textarea {
+  padding: 0.5rem;
+  font-family: var(--md-mono);
+}
+
+.md-mode {
+  margin: 0;
+  min-width: 0;
+  display: inline-flex;
+  padding: 0.125rem;
+  border: 1px solid var(--md-border);
+  border-radius: 0.5rem;
+  background: var(--md-surface);
+}
+
+.md-mode .md-button {
+  height: 1.75rem;
+}
+
+.md-panel {
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--md-border);
+  background: var(--md-muted);
+  font-size: 0.8125rem;
+}
+
+.md-panel label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.md-panel .md-input {
+  width: min(28rem, 60vw);
+}
+
+.md-panel__math {
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.md-panel__preview {
+  min-height: 1.5rem;
+  overflow-x: auto;
+}
+
+.md-status {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--md-subtle);
+}
+
+.md-status[data-kind="error"] {
+  color: var(--text-color-kumo-danger, #dc2626);
+}
+
+.md-source {
+  display: block;
+  width: 100%;
+  min-height: 60vh;
+  padding: 1rem;
+  border: 0;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: var(--md-surface);
+  color: var(--md-text);
+  font-family: var(--md-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  resize: vertical;
+  tab-size: 2;
+}
+
+.md-source:focus {
+  outline: none;
+}
+
+/* ---- 本文 (ブログの記事に近い見た目) ---- */
+
+.md-editor .md-prose {
+  min-height: 60vh;
+  padding: 1.25rem 1.5rem 3rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  outline: none;
+}
+
+.md-editor .md-prose > * + * {
+  margin-top: 1em;
+}
+
+.md-editor .md-prose h1,
+.md-editor .md-prose h2,
+.md-editor .md-prose h3,
+.md-editor .md-prose h4,
+.md-editor .md-prose h5,
+.md-editor .md-prose h6 {
+  margin-top: 1.6em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.md-editor .md-prose h1 {
+  font-size: 1.9em;
+}
+.md-editor .md-prose h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--md-border);
+}
+.md-editor .md-prose h3 {
+  font-size: 1.25em;
+}
+.md-editor .md-prose h4 {
+  font-size: 1.1em;
+}
+
+.md-editor .md-prose a {
+  color: var(--text-color-kumo-link, var(--md-brand));
+  text-decoration: underline;
+}
+
+.md-editor .md-prose ul,
+.md-editor .md-prose ol {
+  padding-left: 1.6em;
+}
+.md-editor .md-prose ul {
+  list-style: disc;
+}
+.md-editor .md-prose ol {
+  list-style: decimal;
+}
+.md-editor .md-prose li > * + * {
+  margin-top: 0.25em;
+}
+
+.md-editor .md-prose ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0.25em;
+}
+.md-editor .md-prose ul[data-type="taskList"] li {
+  display: flex;
+  gap: 0.5em;
+  align-items: flex-start;
+}
+.md-editor .md-prose ul[data-type="taskList"] li > label {
+  margin-top: 0.3em;
+}
+.md-editor .md-prose ul[data-type="taskList"] li > div {
+  flex: 1;
+}
+
+.md-editor .md-prose blockquote {
+  padding-left: 1em;
+  border-left: 4px solid var(--md-border);
+  color: var(--md-subtle);
+}
+
+.md-editor .md-prose hr {
+  border: 0;
+  border-top: 1px solid var(--md-border);
+  margin: 2em 0;
+}
+
+.md-editor .md-prose img {
+  display: inline-block;
+  max-width: 100%;
+  max-height: 28rem;
+  border-radius: 0.375rem;
+}
+.md-editor .md-prose img.ProseMirror-selectednode {
+  outline: 3px solid var(--md-focus);
+}
+
+/* インライン code (Atom One Dark) */
+.md-editor .md-prose :not(pre) > code {
+  padding: 0.125em 0.4em;
+  margin: 0 0.15em;
+  background-color: var(--md-code-bg);
+  color: var(--md-code-fg);
+  border-radius: 0.3em;
+  font-size: 0.875em;
+  font-weight: 500;
+  font-family: var(--md-mono);
+}
+
+/* コードブロック */
+.md-codeblock {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--md-code-bg);
+}
+.md-codeblock__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  background: #21252b;
+}
+.md-codeblock__bar .md-input {
+  height: 1.75rem;
+  border-color: #3a3f4b;
+  background: #282c34;
+  color: #d7dae0;
+  font-family: var(--md-mono);
+  font-size: 0.75rem;
+}
+.md-codeblock__lang {
+  width: 9rem;
+}
+.md-codeblock__meta {
+  flex: 1;
+  min-width: 8rem;
+}
+.md-codeblock pre {
+  margin: 0;
+  padding: 0.875rem 1rem;
+  overflow-x: auto;
+  color: var(--md-code-fg);
+  font-family: var(--md-mono);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+.md-editor .md-codeblock pre code {
+  background: transparent;
+  padding: 0;
+  font-family: inherit;
+}
+
+/* 表 */
+.md-editor .md-prose table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0;
+  overflow: hidden;
+  table-layout: auto;
+}
+.md-editor .md-prose .tableWrapper {
+  overflow-x: auto;
+}
+.md-editor .md-prose th,
+.md-editor .md-prose td {
+  position: relative;
+  min-width: 4em;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--md-border);
+  vertical-align: top;
+}
+.md-editor .md-prose th {
+  background: var(--md-muted);
+  font-weight: 700;
+  text-align: left;
+}
+.md-editor .md-prose th > p,
+.md-editor .md-prose td > p {
+  margin: 0;
+}
+.md-editor .md-prose .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--md-brand) 15%, transparent);
+  pointer-events: none;
+}
+
+/* GitHub アラート (ブログと同じ配色) */
+.md-alert {
+  padding: 0.6rem 1rem 0.75rem 1.1rem;
+  border-left: 4px solid #4493f8;
+  border-radius: 0.375rem;
+  background: rgba(68, 147, 248, 0.08);
+}
+.md-alert__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.md-alert__bar .md-select {
+  height: 1.75rem;
+  font-weight: 700;
+  color: inherit;
+}
+.md-alert[data-alert="note"] {
+  border-left-color: #4493f8;
+  background: rgba(68, 147, 248, 0.08);
+}
+.md-alert[data-alert="note"] .md-alert__bar {
+  color: #4493f8;
+}
+.md-alert[data-alert="tip"] {
+  border-left-color: #3fb950;
+  background: rgba(63, 185, 80, 0.08);
+}
+.md-alert[data-alert="tip"] .md-alert__bar {
+  color: #3fb950;
+}
+.md-alert[data-alert="important"] {
+  border-left-color: #514fc9;
+  background: rgba(81, 79, 201, 0.08);
+}
+.md-alert[data-alert="important"] .md-alert__bar {
+  color: #7a79d9;
+}
+.md-alert[data-alert="warning"] {
+  border-left-color: #d29922;
+  background: rgba(210, 153, 34, 0.1);
+}
+.md-alert[data-alert="warning"] .md-alert__bar {
+  color: #bf8700;
+}
+.md-alert[data-alert="caution"] {
+  border-left-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+.md-alert[data-alert="caution"] .md-alert__bar {
+  color: #ff6b6b;
+}
+.md-editor .md-prose .md-alert__body > * + * {
+  margin-top: 0.75em;
+}
+
+/* 数式 */
+.md-math-inline {
+  padding: 0 0.15em;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.md-math-inline:hover,
+.md-math-block:hover {
+  background: var(--md-muted);
+}
+.md-math-block {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  text-align: center;
+  cursor: pointer;
+}
+.md-math-error {
+  color: var(--text-color-kumo-danger, #dc2626);
+  font-family: var(--md-mono);
+  font-size: 0.875em;
+}
+.ProseMirror-selectednode.md-math-inline,
+.ProseMirror-selectednode .md-math-block,
+.ProseMirror-selectednode .md-raw {
+  outline: 2px solid var(--md-focus);
+}
+
+/* 脚注 */
+.md-editor .md-prose sup[data-footnote-reference] {
+  color: var(--md-brand);
+  font-size: 0.75em;
+}
+.md-footnote {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.9em;
+}
+.md-footnote::before {
+  content: "[^" attr(data-footnote-definition) "]:";
+  color: var(--md-subtle);
+  font-family: var(--md-mono);
+  white-space: nowrap;
+}
+
+/* Markdown のまま保持しているブロック */
+.md-editor .md-raw {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: 1px dashed var(--md-border);
+  border-radius: 0.375rem;
+  background: var(--md-muted);
+}
+.md-editor .md-raw__label {
+  font-size: 0.75rem;
+  color: var(--md-subtle);
+}
+.md-editor .md-raw .md-textarea {
+  width: 100%;
+  resize: vertical;
+  white-space: pre;
+}
+
+.md-editor .md-prose .ProseMirror-gapcursor::after {
+  border-top-color: var(--md-text);
+}
+
+.md-editor[data-minimal="true"] .md-source,
+.md-editor[data-minimal="true"] .md-prose {
+  min-height: 12rem;
+}
+
+@media (max-width: 640px) {
+  .md-editor .md-prose {
+    padding: 1rem 0.875rem 2rem;
+  }
+  .md-toolbar__group {
+    border-right: 0;
+    padding-right: 0;
+  }
+  .md-panel .md-input {
+    width: 100%;
+  }
+}
