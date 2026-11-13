@@ -61,6 +61,7 @@
           "type": "text",
           "required": true,
           "searchable": true,
+          "widget": "markdown-editor:wysiwyg",
           "options": {
             "rows": 24
           }
