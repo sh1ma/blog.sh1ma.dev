@@ -1,5 +1,6 @@
 import { type AnyExtension, Extension, getSchema, Node } from "@tiptap/core"
 import Code from "@tiptap/extension-code"
+import CodeBlock from "@tiptap/extension-code-block"
 import Image from "@tiptap/extension-image"
 import { TaskItem, TaskList } from "@tiptap/extension-list"
 import { TableKit } from "@tiptap/extension-table"
@@ -163,6 +164,7 @@ export function createExtensions(): AnyExtension[] {
   return [
     StarterKit.configure({
       code: false,
+      codeBlock: false,
       underline: false,
       heading: { levels: [1, 2, 3, 4, 5, 6] },
       link: {
@@ -174,6 +176,8 @@ export function createExtensions(): AnyExtension[] {
     }),
     // Markdown ではインラインコードをリンクや太字の中に書けるので、他のマークを排除しない
     Code.extend({ excludes: "" }),
+    // Tab でインデントできるように。言語名の入力欄は admin 側の node view で付ける
+    CodeBlock.configure({ enableTabIndentation: true, tabSize: 2 }),
     Image.configure({ inline: true, allowBase64: false }),
     TaskList,
     TaskItem.configure({ nested: true }),

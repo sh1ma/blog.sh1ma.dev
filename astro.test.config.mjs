@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import emdash, { local } from "emdash/astro"
 import { sqlite } from "emdash/db"
+import { markdownEditorPlugin } from "./src/plugins/markdown-editor"
 
 export default defineConfig({
   site: "http://127.0.0.1:8787",
@@ -24,6 +25,7 @@ export default defineConfig({
         directory: "./uploads",
         baseUrl: "/_emdash/api/media/file",
       }),
+      plugins: [markdownEditorPlugin()],
     }),
   ],
 })

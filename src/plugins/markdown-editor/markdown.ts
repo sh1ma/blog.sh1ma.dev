@@ -48,7 +48,7 @@ const stringifyOptions = {
   resourceLink: true,
 } as const
 
-type ListMarkers = {
+export type ListMarkers = {
   bullet: "-" | "*" | "+"
   bulletOrdered: "." | ")"
 }
