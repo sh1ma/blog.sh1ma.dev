@@ -47,7 +47,7 @@ body {
 }
 
 ::selection {
-  background: var(--admin-accent-soft);
+  background: color-mix(in srgb, var(--admin-accent) 28%, transparent);
 }
 
 :focus-visible {

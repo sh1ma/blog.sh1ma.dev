@@ -32,7 +32,12 @@ const STATE_ORDER: Record<PostState, number> = {
 
 export function StateIcon({ state }: { state: PostState }) {
   const label = STATE_LABELS[state]
-  const props = { "aria-label": label, className: "shrink-0 text-muted" }
+  // 状態は隣に文字でも出すので、読み上げではアイコンを飛ばす (タイトルにはツールチップ)
+  const props = {
+    "aria-hidden": true,
+    title: label,
+    className: "shrink-0 text-muted",
+  }
   if (state === "draft") return <PiFileDashedBold {...props} />
   if (state === "scheduled") return <PiClockBold {...props} />
   if (state === "changed" || state === "changed_scheduled") {

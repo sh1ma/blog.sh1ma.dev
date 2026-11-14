@@ -62,7 +62,11 @@ describe("slug", () => {
   test("検証", () => {
     expect(validateSlug("20261115_hello", existing)).toEqual({ ok: true })
     expect(validateSlug("", existing).ok).toBe(false)
-    expect(validateSlug("20261115_", existing).ok).toBe(false)
+    expect(validateSlug("20261115_", existing)).toEqual({
+      ok: false,
+      message:
+        "日付の後ろに英数字の名前を付けてください (例: 20261114_my_post)",
+    })
     expect(validateSlug("20261115", existing).ok).toBe(false)
     expect(validateSlug("20261115_日本語", existing).ok).toBe(false)
     expect(validateSlug("20261115_Hello", existing).ok).toBe(false)

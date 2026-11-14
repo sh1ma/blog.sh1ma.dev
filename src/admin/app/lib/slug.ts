@@ -61,18 +61,18 @@ export function validateSlug(
 ): SlugCheck {
   const value = slug.trim()
   if (!value) return { ok: false, message: "slug を入力してください" }
+  if (/^\d{8}(?:_\d+)?_?$/.test(value)) {
+    return {
+      ok: false,
+      message:
+        "日付の後ろに英数字の名前を付けてください (例: 20261114_my_post)",
+    }
+  }
   if (!SLUG_PATTERN.test(value)) {
     return {
       ok: false,
       message:
         "slug は半角英小文字・数字と _ - だけで書いてください (日本語は使えません)",
-    }
-  }
-  if (/^\d{8}(?:_\d+)?$/.test(value)) {
-    return {
-      ok: false,
-      message:
-        "日付の後ろに英数字の名前を付けてください (例: 20261114_my_post)",
     }
   }
   for (const existing of existingSlugs) {
