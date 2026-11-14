@@ -20,7 +20,12 @@ type UploadUrlResponse =
       mediaId: string
     }
 
-type MediaItem = { id: string; url: string; filename?: string }
+export type UploadedMedia = { id: string; url: string; filename?: string }
+
+export type UploadOptions = {
+  /** 送信済みの割合 (0〜1)。XMLHttpRequest が無い環境では呼ばれない */
+  onProgress?: (ratio: number) => void
+}
 
 function apiFetch(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers)
@@ -65,21 +70,82 @@ async function dimensions(
   }
 }
 
-async function uploadDirect(file: File): Promise<MediaItem> {
+/**
+ * 進捗を取りたいので XMLHttpRequest で送る (fetch はアップロードの進捗を返さない)。
+ * XMLHttpRequest が無い環境 (テストなど) では fetch にする。
+ */
+function send(
+  url: string,
+  init: {
+    method: string
+    headers: Headers
+    body: Document | XMLHttpRequestBodyInit
+  },
+  onProgress?: (ratio: number) => void,
+): Promise<Response> {
+  if (typeof XMLHttpRequest === "undefined" || !onProgress) {
+    return fetch(url, {
+      method: init.method,
+      headers: init.headers,
+      body: init.body as BodyInit,
+      credentials: "same-origin",
+    })
+  }
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open(init.method, url)
+    // fetch の credentials: "same-origin" と同じ (同一オリジンなら Cookie は送られる。
+    // 署名付き URL が別オリジンでも Cookie を付けない)
+    xhr.withCredentials = false
+    init.headers.forEach((value, key) => {
+      xhr.setRequestHeader(key, value)
+    })
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) onProgress(event.loaded / event.total)
+    }
+    xhr.onload = () => {
+      onProgress(1)
+      resolve(
+        new Response(xhr.status === 204 ? null : xhr.responseText, {
+          status: xhr.status,
+          headers: {
+            "Content-Type": xhr.getResponseHeader("Content-Type") ?? "",
+          },
+        }),
+      )
+    }
+    xhr.onerror = () =>
+      reject(new TypeError("アップロードの通信に失敗しました"))
+    xhr.send(init.body)
+  })
+}
+
+async function uploadDirect(
+  file: File,
+  options: UploadOptions,
+): Promise<UploadedMedia> {
   const form = new FormData()
   form.append("file", file)
   const { width, height } = await dimensions(file)
   if (width) form.append("width", String(width))
   if (height) form.append("height", String(height))
-  const data = await readData<{ item: MediaItem }>(
-    await apiFetch("/media", { method: "POST", body: form }),
+  const headers = new Headers({ "X-EmDash-Request": "1" })
+  const data = await readData<{ item: UploadedMedia }>(
+    await send(
+      `${API}/media`,
+      { method: "POST", headers, body: form },
+      options.onProgress,
+    ),
     "画像のアップロード",
   )
   return data.item
 }
 
-/** 画像をアップロードし、本文に書く URL を返す */
-export async function uploadImage(file: File): Promise<string> {
+/** ファイルを EmDash のメディアにアップロードし、メディアの項目を返す */
+export async function uploadMedia(
+  file: File,
+  options: UploadOptions = {},
+): Promise<UploadedMedia> {
   const response = await apiFetch("/media/upload-url", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -90,27 +156,29 @@ export async function uploadImage(file: File): Promise<string> {
       contentHash: await contentHash(file),
     }),
   })
-  if (response.status === 501) return (await uploadDirect(file)).url
+  if (response.status === 501) return uploadDirect(file, options)
 
   const info = await readData<UploadUrlResponse>(
     response,
     "アップロード先の取得",
   )
-  if (info.existing) return info.url
+  if (info.existing) {
+    options.onProgress?.(1)
+    return { id: info.mediaId, url: info.url, filename: file.name }
+  }
 
   const headers = new Headers(info.headers)
   if (file.type) headers.set("Content-Type", file.type)
-  const put = await fetch(info.uploadUrl, {
-    method: info.method,
-    headers,
-    body: file,
-    credentials: "same-origin",
-  })
+  const put = await send(
+    info.uploadUrl,
+    { method: info.method, headers, body: file },
+    options.onProgress,
+  )
   if (!put.ok) {
     throw new Error(`画像のアップロードに失敗しました (${put.status})`)
   }
 
-  const confirmed = await readData<{ item: MediaItem }>(
+  const confirmed = await readData<{ item: UploadedMedia }>(
     await apiFetch(`/media/${encodeURIComponent(info.mediaId)}/confirm`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -118,7 +186,12 @@ export async function uploadImage(file: File): Promise<string> {
     }),
     "アップロードの確定",
   )
-  return confirmed.item.url
+  return confirmed.item
+}
+
+/** 画像をアップロードし、本文に書く URL を返す */
+export async function uploadImage(file: File): Promise<string> {
+  return (await uploadMedia(file)).url
 }
 
 /** ファイル名から alt の初期値を作る (拡張子を外す) */

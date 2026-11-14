@@ -1,5 +1,4 @@
-import { Extension, type JSONContent } from "@tiptap/core"
-import type { Node as ProseMirrorNode } from "@tiptap/pm/model"
+import { Extension } from "@tiptap/core"
 import type { EditorView } from "@tiptap/pm/view"
 import {
   type Editor,
@@ -41,21 +40,14 @@ import {
   PiWarningCircleBold,
 } from "react-icons/pi"
 import editorCss from "./editor.css?inline"
-import {
-  blockToMarkdown,
-  documentToMarkdown,
-  type ListMarkers,
-  markdownToDocument,
-  nodeKey,
-  type ParsedMarkdown,
-  type SourceMap,
-} from "./markdown"
+import { markdownToDocument, type ParsedMarkdown } from "./markdown"
 import { altFromFilename, uploadImage } from "./media"
 import {
   createEditorExtensions,
   type MathEditRequest,
   renderLatex,
 } from "./node-views"
+import { createSerializer } from "./serializer"
 
 export type FieldProps = {
   value: unknown
@@ -74,53 +66,6 @@ type Panel =
   | { kind: "math"; latex: string; display: boolean; pos: number | null }
 
 type Status = { kind: "info" | "error"; text: string } | null
-
-/** ブロックごとの JSON / キー / Markdown を ProseMirror のノード単位で覚えておく */
-function createSerializer() {
-  const json = new WeakMap<ProseMirrorNode, JSONContent>()
-  const keys = new WeakMap<JSONContent, string>()
-  const texts = new WeakMap<JSONContent, Map<string, string>>()
-
-  return (doc: ProseMirrorNode, sourceMap: SourceMap): string => {
-    const content: JSONContent[] = []
-    doc.forEach((node) => {
-      let value = json.get(node)
-      if (!value) {
-        value = node.toJSON() as JSONContent
-        json.set(node, value)
-      }
-      content.push(value)
-    })
-    return documentToMarkdown(
-      { type: "doc", content },
-      {
-        sourceMap,
-        keyOf: (node) => {
-          let key = keys.get(node)
-          if (key === undefined) {
-            key = nodeKey(node)
-            keys.set(node, key)
-          }
-          return key
-        },
-        serializeBlock: (node, markers: ListMarkers) => {
-          const cacheKey = markers.bullet + markers.bulletOrdered
-          let byMarkers = texts.get(node)
-          if (!byMarkers) {
-            byMarkers = new Map()
-            texts.set(node, byMarkers)
-          }
-          let text = byMarkers.get(cacheKey)
-          if (text === undefined) {
-            text = blockToMarkdown(node, markers)
-            byMarkers.set(cacheKey, text)
-          }
-          return text
-        },
-      },
-    )
-  }
-}
 
 function imageFiles(files: FileList | null | undefined): File[] {
   return Array.from(files ?? []).filter((file) =>
