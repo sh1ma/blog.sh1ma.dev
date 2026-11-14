@@ -67,20 +67,20 @@ export function Sidebar({
 
   return (
     <aside
-      className="ad-sidebar"
+      className="bwa-sidebar"
       data-collapsed={collapsed}
       aria-label="サイドバー"
       aria-hidden={collapsed}
       inert={collapsed}
     >
-      <div className="ad-sidebar__inner">
+      <div className="bwa-sidebar__inner">
         <div className="mb-1 flex items-center gap-1 px-2 py-1">
           <span className="grid size-6 place-items-center rounded-md bg-accent text-[13px] font-bold text-white">
             s
           </span>
           <span className="flex-1 truncate font-semibold">blog.sh1ma.dev</span>
           <button
-            className="ad-btn ad-btn--icon ad-btn--muted"
+            className="bwa-btn bwa-btn--icon bwa-btn--muted"
             onClick={onToggle}
             aria-label="サイドバーを閉じる"
             title="サイドバーを閉じる (⌘\)"
@@ -89,20 +89,20 @@ export function Sidebar({
           </button>
         </div>
 
-        <button className="ad-nav-item" onClick={onSearch}>
+        <button className="bwa-nav-item" onClick={onSearch}>
           <PiMagnifyingGlassBold />
-          <span className="ad-nav-item__label">検索</span>
-          <span className="ad-kbd">⌘K</span>
+          <span className="bwa-nav-item__label">検索</span>
+          <span className="bwa-kbd">⌘K</span>
         </button>
-        <Link className="ad-nav-item" to="/posts/new">
+        <Link className="bwa-nav-item" to="/posts/new">
           <PiNotePencilBold />
-          <span className="ad-nav-item__label">新しい記事</span>
+          <span className="bwa-nav-item__label">新しい記事</span>
         </Link>
 
-        <div className="ad-nav-section">ワークスペース</div>
-        <Link className="ad-nav-item" to="/" aria-current={current("list")}>
+        <div className="bwa-nav-section">ワークスペース</div>
+        <Link className="bwa-nav-item" to="/" aria-current={current("list")}>
           <PiFileTextBold />
-          <span className="ad-nav-item__label">記事</span>
+          <span className="bwa-nav-item__label">記事</span>
         </Link>
         <div className="mb-1 flex flex-wrap gap-x-2 pl-9 text-[12px] text-faint">
           <span>下書き {counts.draft}</span>
@@ -110,23 +110,27 @@ export function Sidebar({
           <span>公開済み {counts.published}</span>
         </div>
         <Link
-          className="ad-nav-item"
+          className="bwa-nav-item"
           to="/media"
           aria-current={current("media")}
         >
           <PiImageSquareBold />
-          <span className="ad-nav-item__label">メディア</span>
+          <span className="bwa-nav-item__label">メディア</span>
         </Link>
-        <Link className="ad-nav-item" to="/tags" aria-current={current("tags")}>
+        <Link
+          className="bwa-nav-item"
+          to="/tags"
+          aria-current={current("tags")}
+        >
           <PiHashBold />
-          <span className="ad-nav-item__label">タグ</span>
+          <span className="bwa-nav-item__label">タグ</span>
         </Link>
 
-        <div className="ad-nav-section">最近編集した記事</div>
+        <div className="bwa-nav-section">最近編集した記事</div>
         {recent.map((row) => (
           <Link
             key={row.item.id}
-            className="ad-nav-item"
+            className="bwa-nav-item"
             to={`/posts/${row.item.id}`}
             aria-current={
               route.name === "editor" && route.id === row.item.id
@@ -135,35 +139,35 @@ export function Sidebar({
             }
           >
             <PiFileTextBold />
-            <span className="ad-nav-item__label">{row.title || "無題"}</span>
+            <span className="bwa-nav-item__label">{row.title || "無題"}</span>
             {row.item.locale === "en" ? (
-              <span className="ad-nav-item__count">EN</span>
+              <span className="bwa-nav-item__count">EN</span>
             ) : null}
           </Link>
         ))}
 
         <div className="mt-auto pt-4">
-          <a className="ad-nav-item" href={classicUrl.settings}>
+          <a className="bwa-nav-item" href={classicUrl.settings}>
             <PiGearSixBold />
-            <span className="ad-nav-item__label">EmDash の設定</span>
+            <span className="bwa-nav-item__label">EmDash の設定</span>
           </a>
-          <a className="ad-nav-item" href={classicUrl.dashboard}>
+          <a className="bwa-nav-item" href={classicUrl.dashboard}>
             <PiArrowSquareOutBold />
-            <span className="ad-nav-item__label">元の EmDash 管理画面</span>
+            <span className="bwa-nav-item__label">元の EmDash 管理画面</span>
           </a>
           <button
-            className="ad-nav-item"
+            className="bwa-nav-item"
             onClick={() => onTheme(resolvedTheme === "dark" ? "light" : "dark")}
           >
             {resolvedTheme === "dark" ? <PiSunBold /> : <PiMoonBold />}
-            <span className="ad-nav-item__label">
+            <span className="bwa-nav-item__label">
               {resolvedTheme === "dark" ? "ライトにする" : "ダークにする"}
             </span>
           </button>
-          <button className="ad-nav-item" onClick={logout}>
+          <button className="bwa-nav-item" onClick={logout}>
             <PiSignOutBold />
-            <span className="ad-nav-item__label">ログアウト</span>
-            <span className="ad-nav-item__count truncate">
+            <span className="bwa-nav-item__label">ログアウト</span>
+            <span className="bwa-nav-item__count truncate">
               {me.name ?? me.email}
             </span>
           </button>

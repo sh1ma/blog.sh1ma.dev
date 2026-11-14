@@ -188,7 +188,7 @@ test.describe("管理画面 (dev サーバー)", () => {
       "content",
       /noindex/,
     )
-    await expect(page.locator(".ad-table tbody tr")).toHaveCount(48)
+    await expect(page.locator(".bwa-table tbody tr")).toHaveCount(48)
     await shot(page, "01-list-light")
 
     // デバイスフローの承認ページ・設定は EmDash のまま
@@ -198,7 +198,7 @@ test.describe("管理画面 (dev サーバー)", () => {
       expect(html, path).not.toContain('data-admin="notion"')
     }
     await page.goto(`${ADMIN}/device`)
-    await expect(page.locator(".ad-shell")).toHaveCount(0)
+    await expect(page.locator(".bwa-shell")).toHaveCount(0)
 
     // 逃げ道: ?classic=1 で元の SPA
     for (const path of ["", "/media", "/tags"]) {
@@ -209,7 +209,7 @@ test.describe("管理画面 (dev サーバー)", () => {
       expect(html, path).not.toContain('data-admin="notion"')
     }
     await page.goto(`${ADMIN}?classic=1`)
-    await expect(page.locator(".ad-shell")).toHaveCount(0)
+    await expect(page.locator(".bwa-shell")).toHaveCount(0)
     await shot(page, "19-classic-dashboard")
     // 元の SPA の記事編集 (本文ウィジェット) も開ける
     const post = await findPost(page.request, "20230102_helloworld")
@@ -217,7 +217,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     await expect(
       page.locator("[data-markdown-editor] .ProseMirror"),
     ).toBeVisible({ timeout: 120_000 })
-    await expect(page.locator(".ad-shell")).toHaveCount(0)
+    await expect(page.locator(".bwa-shell")).toHaveCount(0)
   })
 
   test("2. 既存記事を開いただけでは保存されない", async () => {
@@ -235,7 +235,7 @@ test.describe("管理画面 (dev サーバー)", () => {
         writes.push(request.url())
     })
     await openEditor(page, post.id)
-    await expect(page.locator(".ad-title")).toHaveValue(before.item.data.title)
+    await expect(page.locator(".bwa-title")).toHaveValue(before.item.data.title)
     await expect(page.getByTestId("save-status")).toHaveText("")
     await page.waitForTimeout(4000)
     await shot(page, "02-editor-open")
@@ -256,7 +256,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     await openEditor(page, post.id)
 
     // タイトル
-    const title = page.locator(".ad-title")
+    const title = page.locator(".bwa-title")
     await title.click()
     await page.keyboard.press("End")
     await page.keyboard.type(" (編集)")
@@ -399,8 +399,8 @@ test.describe("管理画面 (dev サーバー)", () => {
   test("4. 新規記事: 下書き → 予約 → 予約取り消し → 公開 → 公開取り消し → 削除", async () => {
     await page.goto(ADMIN)
     await page.getByRole("link", { name: "新しい記事" }).click()
-    await expect(page.locator(".ad-title")).toBeFocused({ timeout: 30_000 })
-    await page.locator(".ad-title").fill("新規記事のテスト")
+    await expect(page.locator(".bwa-title")).toBeFocused({ timeout: 30_000 })
+    await page.locator(".bwa-title").fill("新規記事のテスト")
     // 日本語のタイトルからは英数字の slug を作れないので必須チェックが出る
     await expect(page.locator("#prop-slug-hint")).toContainText(
       "日付の後ろに英数字",
@@ -431,7 +431,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     await expect(page.getByLabel("予約日時")).toBeVisible()
     await shot(page, "07-schedule-picker")
     await page.getByRole("button", { name: "予約する" }).click()
-    await expect(page.locator(".ad-props .ad-state")).toHaveText("予約", {
+    await expect(page.locator(".bwa-props .bwa-state")).toHaveText("予約", {
       timeout: 15_000,
     })
     expect((await getPost(page.request, id)).item.status).toBe("scheduled")
@@ -439,7 +439,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     // 予約を取り消す
     await page.getByRole("button", { name: /予約済み/ }).click()
     await page.getByRole("menuitem", { name: /予約を取り消す/ }).click()
-    await expect(page.locator(".ad-props .ad-state")).toHaveText("下書き", {
+    await expect(page.locator(".bwa-props .bwa-state")).toHaveText("下書き", {
       timeout: 15_000,
     })
     expect((await getPost(page.request, id)).item.status).toBe("draft")
@@ -447,7 +447,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     // 公開
     await page.getByRole("button", { name: /^公開/ }).click()
     await page.getByRole("menuitem", { name: /今すぐ公開/ }).click()
-    await expect(page.locator(".ad-props .ad-state")).toHaveText("公開中", {
+    await expect(page.locator(".bwa-props .bwa-state")).toHaveText("公開中", {
       timeout: 15_000,
     })
     const live = await publicHtml(page.request, `/articles/${slug}`)
@@ -458,7 +458,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     await page.getByRole("button", { name: /公開中/ }).click()
     await page.getByRole("menuitem", { name: /公開を取り消す/ }).click()
     await page.getByRole("button", { name: "取り消す", exact: true }).click()
-    await expect(page.locator(".ad-props .ad-state")).toHaveText("下書き", {
+    await expect(page.locator(".bwa-props .bwa-state")).toHaveText("下書き", {
       timeout: 15_000,
     })
     expect((await publicHtml(page.request, `/articles/${slug}`)).status).toBe(
@@ -484,7 +484,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     await page.keyboard.press("Backspace")
     await page.keyboard.type("E2E 公開後の変更")
     await expectSaved(page)
-    await expect(page.locator(".ad-props .ad-state")).toHaveText(
+    await expect(page.locator(".bwa-props .bwa-state")).toHaveText(
       "公開中＋未公開の変更",
     )
     expect(
@@ -494,16 +494,16 @@ test.describe("管理画面 (dev サーバー)", () => {
     await page.getByRole("link", { name: "記事", exact: true }).first().click()
     await expect(
       page
-        .locator(".ad-table tbody tr")
+        .locator(".bwa-table tbody tr")
         .filter({
           has: page.getByRole("link", { name: post.data.title, exact: true }),
         })
-        .locator(".ad-state"),
+        .locator(".bwa-state"),
     ).toHaveText("公開中＋未公開の変更")
     await openEditor(page, post.id)
     await page.getByRole("button", { name: /変更を公開/ }).click()
     await page.getByRole("menuitem", { name: "変更を公開" }).click()
-    await expect(page.locator(".ad-props .ad-state")).toHaveText("公開中", {
+    await expect(page.locator(".bwa-props .bwa-state")).toHaveText("公開中", {
       timeout: 15_000,
     })
     expect(
@@ -520,7 +520,7 @@ test.describe("管理画面 (dev サーバー)", () => {
       method: "PUT",
       data: { data: { description: "別の場所での変更" }, _rev: current._rev },
     })
-    await page.locator(".ad-title").click()
+    await page.locator(".bwa-title").click()
     await page.keyboard.press("End")
     await page.keyboard.type(" 衝突")
     await expect(
@@ -558,7 +558,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     await detail.getByRole("textbox").fill("E2E の代替テキスト")
     await detail.getByRole("button", { name: "alt を保存" }).click()
     await expect(
-      page.locator(".ad-toast", { hasText: "代替テキストを保存しました" }),
+      page.locator(".bwa-toast", { hasText: "代替テキストを保存しました" }),
     ).toBeVisible()
     await shot(page, "10-media-detail")
     const { items } = await api<{
@@ -577,7 +577,7 @@ test.describe("管理画面 (dev サーバー)", () => {
     const picker = page.getByRole("dialog", { name: "画像を挿入" })
     await picker.getByRole("button", { name: "e2e-one.png" }).click()
     await expect(body(page).locator(`img[src='${one?.url}']`)).toBeVisible()
-    await page.locator(".ad-title-area").hover()
+    await page.locator(".bwa-title-area").hover()
     await page.getByRole("button", { name: "カバーを追加" }).click()
     await page
       .getByRole("dialog", { name: "カバー画像" })
@@ -728,7 +728,7 @@ test.describe("管理画面 (dev サーバー)", () => {
 
   test("スクリーンショット: ⌘K・ダーク・ギャラリー・幅", async () => {
     await page.goto(ADMIN)
-    await expect(page.locator(".ad-table tbody tr").first()).toBeVisible()
+    await expect(page.locator(".bwa-table tbody tr").first()).toBeVisible()
     await page.keyboard.press("Control+k")
     await page.getByRole("combobox", { name: "記事を検索" }).fill("cloudflare")
     await shot(page, "13-command-palette")

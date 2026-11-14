@@ -228,9 +228,9 @@ export function AdminProvider({
   return (
     <AdminContext.Provider value={value}>
       {children}
-      <div className="ad-toasts" aria-live="polite">
+      <div className="bwa-toasts" aria-live="polite">
         {toasts.map((entry) => (
-          <div key={entry.id} className="ad-toast" data-tone={entry.tone}>
+          <div key={entry.id} className="bwa-toast" data-tone={entry.tone}>
             {entry.text}
           </div>
         ))}

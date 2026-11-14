@@ -132,9 +132,9 @@ export function CommandPalette({
   const clamped = Math.min(active, Math.max(0, items.length - 1))
 
   return (
-    <Dialog title="検索" onClose={onClose} className="ad-palette">
+    <Dialog title="検索" onClose={onClose} className="bwa-palette">
       <input
-        className="ad-palette__input -mx-5 -mt-2 w-[calc(100%+2.5rem)]"
+        className="bwa-palette__input -mx-5 -mt-2 w-[calc(100%+2.5rem)]"
         placeholder="記事を検索… (タイトル・slug・タグ)"
         value={query}
         aria-label="記事を検索"
@@ -176,7 +176,7 @@ export function CommandPalette({
             id={`palette-${item.key}`}
             role="option"
             aria-selected={index === clamped}
-            className="ad-menu-item"
+            className="bwa-menu-item"
             data-active={index === clamped}
             onMouseEnter={() => setActive(index)}
             onClick={item.run}
@@ -184,7 +184,7 @@ export function CommandPalette({
             {item.icon}
             <span className="min-w-0 flex-1 truncate">{item.label}</span>
             {item.detail ? (
-              <span className="ad-menu-item__hint ad-hide-sm max-w-[40%] truncate">
+              <span className="bwa-menu-item__hint bwa-hide-sm max-w-[40%] truncate">
                 {item.detail}
               </span>
             ) : null}

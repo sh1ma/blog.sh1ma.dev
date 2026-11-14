@@ -94,8 +94,8 @@ function Shell() {
       break
     default:
       page = (
-        <div className="ad-page">
-          <h1 className="ad-page__title">ページが見つかりません</h1>
+        <div className="bwa-page">
+          <h1 className="bwa-page__title">ページが見つかりません</h1>
           <p className="mt-4">
             <Link to="/" className="text-accent">
               記事一覧へ
@@ -106,7 +106,7 @@ function Shell() {
   }
 
   return (
-    <div className="ad-shell">
+    <div className="bwa-shell">
       <Sidebar
         route={route}
         collapsed={collapsed}
@@ -116,10 +116,10 @@ function Shell() {
         resolvedTheme={theme.resolved}
         onTheme={theme.choose}
       />
-      <main className="ad-main">
+      <main className="bwa-main">
         {collapsed ? (
           <button
-            className="ad-btn ad-btn--icon ad-btn--muted fixed top-2 left-2 z-30"
+            className="bwa-btn bwa-btn--icon bwa-btn--muted fixed top-2 left-2 z-30"
             onClick={toggleSidebar}
             aria-label="サイドバーを開く"
             title="サイドバーを開く (⌘\)"

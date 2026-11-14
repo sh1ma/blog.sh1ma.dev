@@ -70,8 +70,8 @@ export function TagsPage() {
 
   if (!layout.tagsField) {
     return (
-      <div className="ad-page">
-        <h1 className="ad-page__title">タグ</h1>
+      <div className="bwa-page">
+        <h1 className="bwa-page__title">タグ</h1>
         <p className="mt-4 text-muted">
           このコレクションにはタグの項目がありません。
         </p>
@@ -80,14 +80,14 @@ export function TagsPage() {
   }
 
   return (
-    <div className="ad-page">
-      <h1 className="ad-page__title">タグ</h1>
+    <div className="bwa-page">
+      <h1 className="bwa-page__title">タグ</h1>
       <p className="mb-6 text-muted">
         記事に付いているタグの一覧です ({summary.length}{" "}
         個)。名前の変更・統合・削除は、影響する記事を確認してから実行します。
       </p>
       {!access.canEditAny ? (
-        <div className="ad-callout mb-4" data-tone="warning">
+        <div className="bwa-callout mb-4" data-tone="warning">
           <PiWarningBold />
           <p>
             他の人の記事のタグは変更できません
@@ -96,7 +96,7 @@ export function TagsPage() {
         </div>
       ) : null}
       <input
-        className="ad-input mb-3 !w-64"
+        className="bwa-input mb-3 !w-64"
         type="search"
         placeholder="タグを検索"
         aria-label="タグを検索"
@@ -104,7 +104,7 @@ export function TagsPage() {
         onChange={(event) => setQuery(event.target.value)}
       />
       <div className="overflow-x-auto">
-        <table className="ad-table min-w-[640px]">
+        <table className="bwa-table min-w-[640px]">
           <thead>
             <tr>
               <th>タグ</th>
@@ -133,7 +133,7 @@ export function TagsPage() {
                 <td>
                   <div className="flex gap-0.5">
                     <button
-                      className="ad-btn ad-btn--sm"
+                      className="bwa-btn bwa-btn--sm"
                       aria-label={`「${tag.name}」の名前を変更`}
                       onClick={() =>
                         setDraft({
@@ -147,7 +147,7 @@ export function TagsPage() {
                       名前を変更
                     </button>
                     <button
-                      className="ad-btn ad-btn--sm"
+                      className="bwa-btn bwa-btn--sm"
                       aria-label={`「${tag.name}」を統合`}
                       onClick={() =>
                         setDraft({ kind: "merge", from: tag.name, into: "" })
@@ -157,7 +157,7 @@ export function TagsPage() {
                       統合
                     </button>
                     <button
-                      className="ad-btn ad-btn--sm ad-btn--danger"
+                      className="bwa-btn bwa-btn--sm bwa-btn--danger"
                       aria-label={`「${tag.name}」を削除`}
                       onClick={() =>
                         setDraft({ kind: "delete", tag: tag.name })
@@ -259,13 +259,13 @@ function TagChangeDialog({
     step === "input" ? (
       <>
         <button
-          className="ad-btn ad-btn--outline"
+          className="bwa-btn bwa-btn--outline"
           onClick={() => onClose(false)}
         >
           キャンセル
         </button>
         <button
-          className="ad-btn ad-btn--primary"
+          className="bwa-btn bwa-btn--primary"
           disabled={Boolean(problem)}
           onClick={() => setStep("confirm")}
         >
@@ -275,7 +275,7 @@ function TagChangeDialog({
     ) : step === "confirm" ? (
       <>
         <button
-          className="ad-btn ad-btn--outline"
+          className="bwa-btn bwa-btn--outline"
           onClick={() =>
             draft.kind === "delete" ? onClose(false) : setStep("input")
           }
@@ -283,7 +283,7 @@ function TagChangeDialog({
           {draft.kind === "delete" ? "キャンセル" : "戻る"}
         </button>
         <button
-          className={`ad-btn ${draft.kind === "delete" ? "ad-btn--danger-solid" : "ad-btn--primary"}`}
+          className={`bwa-btn ${draft.kind === "delete" ? "bwa-btn--danger-solid" : "bwa-btn--primary"}`}
           disabled={plan.length === 0 || Boolean(problem)}
           onClick={() => void run(plan)}
         >
@@ -294,13 +294,16 @@ function TagChangeDialog({
       <>
         {failed.length > 0 ? (
           <button
-            className="ad-btn ad-btn--outline"
+            className="bwa-btn bwa-btn--outline"
             onClick={() => void run(failed)}
           >
             失敗した {failed.length} 件を再実行
           </button>
         ) : null}
-        <button className="ad-btn ad-btn--primary" onClick={() => onClose(ran)}>
+        <button
+          className="bwa-btn bwa-btn--primary"
+          onClick={() => onClose(ran)}
+        >
           閉じる
         </button>
       </>
@@ -319,7 +322,7 @@ function TagChangeDialog({
             <label className="grid gap-1">
               <span className="text-[13px] text-muted">新しい名前</span>
               <input
-                className="ad-input"
+                className="bwa-input"
                 value={draft.to}
                 aria-label="新しい名前"
                 onChange={(event) =>
@@ -342,7 +345,7 @@ function TagChangeDialog({
                 まとめ先のタグ (既存のタグから選ぶか、新しい名前)
               </span>
               <input
-                className="ad-input"
+                className="bwa-input"
                 list="merge-targets"
                 value={draft.into}
                 aria-label="まとめ先のタグ"
@@ -373,7 +376,7 @@ function TagChangeDialog({
       ) : (
         <div className="grid gap-3">
           <div className="text-[14px]">{describe()}</div>
-          <div className="ad-callout text-[13px]">
+          <div className="bwa-callout text-[13px]">
             <PiWarningBold />
             <div>
               <p>

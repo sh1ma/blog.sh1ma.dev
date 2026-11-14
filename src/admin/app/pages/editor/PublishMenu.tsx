@@ -90,7 +90,7 @@ export function PublishMenu({
   ) => (
     <button
       role="menuitem"
-      className={`ad-menu-item ${options.danger ? "ad-menu-item--danger" : ""}`}
+      className={`bwa-menu-item ${options.danger ? "bwa-menu-item--danger" : ""}`}
       onClick={() => {
         if (action === "picker") {
           setWhen(defaultScheduleValue(scheduledAt))
@@ -112,7 +112,7 @@ export function PublishMenu({
     <>
       <button
         ref={button}
-        className={`ad-btn ${state === "draft" || state === "changed" || state === null ? "ad-btn--primary" : "ad-btn--outline"}`}
+        className={`bwa-btn ${state === "draft" || state === "changed" || state === null ? "bwa-btn--primary" : "bwa-btn--outline"}`}
         disabled={disabled || busy || !canPublish}
         title={canPublish ? undefined : "公開する権限がありません"}
         aria-haspopup="menu"
@@ -152,7 +152,7 @@ export function PublishMenu({
                   {isLive ? "変更を公開する日時" : "公開する日時"}
                 </span>
                 <input
-                  className="ad-input"
+                  className="bwa-input"
                   type="datetime-local"
                   value={when}
                   aria-label="予約日時"
@@ -166,14 +166,14 @@ export function PublishMenu({
               <div className="flex justify-end gap-1">
                 <button
                   type="button"
-                  className="ad-btn ad-btn--outline"
+                  className="bwa-btn bwa-btn--outline"
                   onClick={() => setPicker(false)}
                 >
                   戻る
                 </button>
                 <button
                   type="submit"
-                  className="ad-btn ad-btn--primary"
+                  className="bwa-btn bwa-btn--primary"
                   disabled={!future}
                 >
                   予約する
@@ -241,7 +241,7 @@ export function PublishMenu({
               ) : null}
               {isLive ? (
                 <>
-                  <div className="ad-menu-sep" />
+                  <div className="bwa-menu-sep" />
                   {item(
                     "公開を取り消す",
                     { kind: "unpublish" },
