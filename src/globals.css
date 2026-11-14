@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "./syntax-highlight.css";
+/* 管理画面 (src/admin) は別の CSS (src/admin/app/styles/admin.css) を持つので、公開ページには含めない */
+@source not "./admin";
 @config "../tailwind.config.ts";
 
 :root {
