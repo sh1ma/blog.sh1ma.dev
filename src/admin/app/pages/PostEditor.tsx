@@ -685,12 +685,12 @@ export function PostEditor({ route }: { route: EditorRoute }) {
 
   if (loadError) {
     return (
-      <div className="ad-page">
-        <div className="ad-callout mt-16" data-tone="danger">
+      <div className="bwa-page">
+        <div className="bwa-callout mt-16" data-tone="danger">
           <PiWarningBold />
           <div>
             <p>記事を開けませんでした: {loadError}</p>
-            <Link to="/" className="ad-btn ad-btn--outline mt-2">
+            <Link to="/" className="bwa-btn bwa-btn--outline mt-2">
               記事一覧へ
             </Link>
           </div>
@@ -713,19 +713,19 @@ export function PostEditor({ route }: { route: EditorRoute }) {
 
   return (
     <div className="min-h-screen" data-testid="post-editor">
-      <header className="ad-topbar">
-        <nav className="ad-crumbs" aria-label="パンくず">
+      <header className="bwa-topbar">
+        <nav className="bwa-crumbs" aria-label="パンくず">
           <Link to="/">記事</Link>
           <span aria-hidden="true">/</span>
-          <span className="ad-crumbs__current">{title || "無題"}</span>
+          <span className="bwa-crumbs__current">{title || "無題"}</span>
           {locale === "en" ? (
-            <span className="ad-chip" data-color="gray">
+            <span className="bwa-chip" data-color="gray">
               EN
             </span>
           ) : null}
         </nav>
         <span
-          className="ad-save ad-hide-sm"
+          className="bwa-save bwa-hide-sm"
           data-kind={saveState.kind}
           role="status"
           data-testid="save-status"
@@ -733,19 +733,19 @@ export function PostEditor({ route }: { route: EditorRoute }) {
           {saveLabel(saveState, !item)}
         </span>
         {lockHolder ? (
-          <span className="ad-save" data-kind="locked" title="編集ロック">
+          <span className="bwa-save" data-kind="locked" title="編集ロック">
             <PiLockSimpleBold className="inline" />{" "}
             {lockHolder.userName ?? "他の人"}が編集中
           </span>
         ) : null}
         <button
-          className="ad-btn ad-btn--muted"
+          className="bwa-btn bwa-btn--muted"
           onClick={preview}
           disabled={!item}
           title="プレビューを新しいタブで開く"
         >
           <PiEyeBold />
-          <span className="ad-hide-sm">プレビュー</span>
+          <span className="bwa-hide-sm">プレビュー</span>
         </button>
         <PublishMenu
           state={state}
@@ -757,7 +757,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
         />
         <button
           ref={moreButton}
-          className="ad-btn ad-btn--icon ad-btn--muted"
+          className="bwa-btn bwa-btn--icon bwa-btn--muted"
           aria-label="その他の操作"
           aria-haspopup="menu"
           aria-expanded={moreOpen}
@@ -782,7 +782,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
                   </code>
                   {item?.slug ? (
                     <button
-                      className="ad-btn ad-btn--icon ad-btn--sm ad-btn--muted"
+                      className="bwa-btn bwa-btn--icon bwa-btn--sm bwa-btn--muted"
                       aria-label="公開 URL をコピー"
                       title="公開 URL をコピー"
                       onClick={() => {
@@ -800,10 +800,10 @@ export function PostEditor({ route }: { route: EditorRoute }) {
                   ) : null}
                 </div>
               </div>
-              <div className="ad-menu-sep" />
+              <div className="bwa-menu-sep" />
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 disabled={!item}
                 onClick={() => {
                   setMoreOpen(false)
@@ -816,7 +816,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               {item && translation ? (
                 <button
                   role="menuitem"
-                  className="ad-menu-item"
+                  className="bwa-menu-item"
                   onClick={() => {
                     setMoreOpen(false)
                     navigate(`/posts/${translation.id}`)
@@ -829,7 +829,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               {item && translations && !translation && locale === "ja" ? (
                 <button
                   role="menuitem"
-                  className="ad-menu-item"
+                  className="bwa-menu-item"
                   onClick={() => {
                     setMoreOpen(false)
                     navigate(`/posts/new?locale=en&translationOf=${item.id}`)
@@ -841,7 +841,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               ) : null}
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={() =>
                   switchMode(mode === "wysiwyg" ? "source" : "wysiwyg")
                 }
@@ -853,7 +853,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               </button>
               <button
                 role="menuitemcheckbox"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={toggleFullWidth}
                 aria-checked={fullWidth}
               >
@@ -863,17 +863,17 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               {item ? (
                 <a
                   role="menuitem"
-                  className="ad-menu-item no-underline"
+                  className="bwa-menu-item no-underline"
                   href={classicUrl.post(item.id)}
                 >
                   <PiArrowSquareOutBold />
                   元の EmDash で開く
                 </a>
               ) : null}
-              <div className="ad-menu-sep" />
+              <div className="bwa-menu-sep" />
               <button
                 role="menuitem"
-                className="ad-menu-item ad-menu-item--danger"
+                className="bwa-menu-item bwa-menu-item--danger"
                 disabled={!item || busy}
                 onClick={() => {
                   setMoreOpen(false)
@@ -890,7 +890,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
 
       {stashOffer ? (
         <div className="mx-auto max-w-[740px] px-4 pt-2">
-          <div className="ad-callout" data-tone="warning" role="alert">
+          <div className="bwa-callout" data-tone="warning" role="alert">
             <PiWarningBold />
             <div className="grid gap-2">
               <p>
@@ -900,13 +900,13 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               </p>
               <div className="flex gap-1">
                 <button
-                  className="ad-btn ad-btn--primary ad-btn--sm"
+                  className="bwa-btn bwa-btn--primary bwa-btn--sm"
                   onClick={restoreStash}
                 >
                   復元する
                 </button>
                 <button
-                  className="ad-btn ad-btn--outline ad-btn--sm"
+                  className="bwa-btn bwa-btn--outline bwa-btn--sm"
                   onClick={() => {
                     clearStash(stashKeyRef.current)
                     setStashOffer(null)
@@ -921,7 +921,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
       ) : null}
       {lockHolder ? (
         <div className="mx-auto max-w-[740px] px-4 pt-2">
-          <div className="ad-callout" data-tone="warning" role="alert">
+          <div className="bwa-callout" data-tone="warning" role="alert">
             <PiLockSimpleBold />
             <div className="grid gap-2">
               <p>
@@ -931,7 +931,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
               </p>
               <div>
                 <button
-                  className="ad-btn ad-btn--outline ad-btn--sm"
+                  className="bwa-btn bwa-btn--outline bwa-btn--sm"
                   onClick={() => item && void acquireLock(item.id, true)}
                 >
                   引き継いで編集する
@@ -943,7 +943,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
       ) : null}
       {readOnly ? (
         <div className="mx-auto max-w-[740px] px-4 pt-2">
-          <div className="ad-callout" role="status">
+          <div className="bwa-callout" role="status">
             <PiLockSimpleBold />
             <p>この記事を編集する権限がありません (表示のみ)。</p>
           </div>
@@ -951,7 +951,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
       ) : null}
       {source ? (
         <div className="mx-auto max-w-[740px] px-4 pt-2">
-          <div className="ad-callout" data-tone="accent" role="status">
+          <div className="bwa-callout" data-tone="accent" role="status">
             <PiTranslateBold />
             <p>
               「{String(source.data[layout.titleField] ?? "")}」の English
@@ -962,15 +962,15 @@ export function PostEditor({ route }: { route: EditorRoute }) {
       ) : null}
 
       {cover ? (
-        <div className="ad-cover" data-testid="cover">
+        <div className="bwa-cover" data-testid="cover">
           <img src={cover} alt="カバー画像" />
           {readOnly ? null : (
-            <div className="ad-cover__actions">
-              <button className="ad-btn" onClick={() => setDialog("cover")}>
+            <div className="bwa-cover__actions">
+              <button className="bwa-btn" onClick={() => setDialog("cover")}>
                 カバーを変更
               </button>
               <button
-                className="ad-btn"
+                className="bwa-btn"
                 onClick={() =>
                   layout.coverField && update(layout.coverField, "")
                 }
@@ -982,13 +982,13 @@ export function PostEditor({ route }: { route: EditorRoute }) {
         </div>
       ) : null}
 
-      <div className="ad-doc" data-full={fullWidth}>
-        <div className="ad-doc__inner">
-          <div className="ad-title-area" data-has-cover={Boolean(cover)}>
-            <div className="ad-title-tools">
+      <div className="bwa-doc" data-full={fullWidth}>
+        <div className="bwa-doc__inner">
+          <div className="bwa-title-area" data-has-cover={Boolean(cover)}>
+            <div className="bwa-title-tools">
               {!cover && layout.coverField && !readOnly ? (
                 <button
-                  className="ad-btn ad-btn--muted ad-btn--sm"
+                  className="bwa-btn bwa-btn--muted bwa-btn--sm"
                   onClick={() => setDialog("cover")}
                 >
                   <PiImageBold />
@@ -1001,7 +1001,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
                 titleRef.current = element
                 autosize(element)
               }}
-              className="ad-title"
+              className="bwa-title"
               rows={1}
               placeholder="無題"
               aria-label="タイトル"
@@ -1053,7 +1053,7 @@ export function PostEditor({ route }: { route: EditorRoute }) {
             />
           ) : (
             <textarea
-              className="ad-source mt-2"
+              className="bwa-source mt-2"
               aria-label="本文 (Markdown)"
               spellCheck={false}
               value={String(data[layout.bodyField] ?? "")}
@@ -1071,13 +1071,13 @@ export function PostEditor({ route }: { route: EditorRoute }) {
           footer={
             <>
               <button
-                className="ad-btn ad-btn--outline"
+                className="bwa-btn bwa-btn--outline"
                 onClick={() => void resolveConflict("reload")}
               >
                 再読込する (この画面の変更を捨てる)
               </button>
               <button
-                className="ad-btn ad-btn--primary"
+                className="bwa-btn bwa-btn--primary"
                 onClick={() => void resolveConflict("overwrite")}
               >
                 上書きする
@@ -1101,13 +1101,13 @@ export function PostEditor({ route }: { route: EditorRoute }) {
           footer={
             <>
               <button
-                className="ad-btn ad-btn--outline"
+                className="bwa-btn bwa-btn--outline"
                 onClick={() => void resolveConflict("reload")}
               >
                 最新の内容を読み込む
               </button>
               <button
-                className="ad-btn ad-btn--primary"
+                className="bwa-btn bwa-btn--primary"
                 onClick={() => void autosaveRef.current?.overrideLockAndSave()}
               >
                 それでも保存する

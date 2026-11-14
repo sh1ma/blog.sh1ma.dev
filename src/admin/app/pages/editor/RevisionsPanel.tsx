@@ -50,7 +50,7 @@ export function RevisionsPanel({
   return (
     <Dialog title="リビジョン履歴" onClose={onClose} wide>
       {error ? (
-        <div className="ad-callout" data-tone="danger">
+        <div className="bwa-callout" data-tone="danger">
           <PiWarningBold />
           <p>{error}</p>
         </div>
@@ -70,7 +70,7 @@ export function RevisionsPanel({
             {revisions.map((revision) => (
               <li key={revision.id}>
                 <button
-                  className="ad-menu-item"
+                  className="bwa-menu-item"
                   data-active={selected?.id === revision.id}
                   aria-pressed={selected?.id === revision.id}
                   onClick={() => setSelected(revision)}
@@ -94,7 +94,7 @@ export function RevisionsPanel({
                   {String(selected.data[titleField] ?? "") || "無題"}
                 </h3>
                 <button
-                  className="ad-btn ad-btn--primary shrink-0"
+                  className="bwa-btn bwa-btn--primary shrink-0"
                   disabled={busy || selected.id === item.draftRevisionId}
                   onClick={async () => {
                     setBusy(true)

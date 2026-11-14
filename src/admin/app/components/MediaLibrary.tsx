@@ -165,7 +165,7 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
 
   return (
     <div
-      className="ad-dropzone relative rounded-lg"
+      className="bwa-dropzone relative rounded-lg"
       data-active={dragging}
       onDragOver={(event) => {
         if (event.dataTransfer.types.includes("Files")) {
@@ -182,7 +182,7 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
         <div className="relative min-w-48 flex-1">
           <PiMagnifyingGlassBold className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-faint" />
           <input
-            className="ad-input pl-7"
+            className="bwa-input pl-7"
             type="search"
             placeholder="ファイル名で検索"
             aria-label="メディアを検索"
@@ -191,7 +191,7 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
           />
         </div>
         <button
-          className="ad-btn ad-btn--primary"
+          className="bwa-btn bwa-btn--primary"
           onClick={() => fileInput.current?.click()}
           disabled={!access.canWrite}
         >
@@ -226,7 +226,7 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
                   {upload.error ?? `${Math.round(upload.progress * 100)}%`}
                 </span>
               </span>
-              <div className="ad-progress">
+              <div className="bwa-progress">
                 <div style={{ width: `${upload.progress * 100}%` }} />
               </div>
             </li>
@@ -235,7 +235,7 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
       ) : null}
 
       {error ? (
-        <div className="ad-callout mb-3" data-tone="danger">
+        <div className="bwa-callout mb-3" data-tone="danger">
           <PiWarningBold />
           <p>メディアを読み込めませんでした: {error}</p>
         </div>
@@ -249,11 +249,11 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
         }
       >
         <div>
-          <div className="ad-media-grid">
+          <div className="bwa-media-grid">
             {visible.map((item) => (
               <button
                 key={item.id}
-                className="ad-media-tile"
+                className="bwa-media-tile"
                 aria-pressed={item.id === selectedId}
                 title={item.filename}
                 onClick={() =>
@@ -264,13 +264,13 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
               >
                 {isImage(item) ? (
                   <img
-                    className="ad-media-tile__thumb"
+                    className="bwa-media-tile__thumb"
                     src={item.url}
                     alt={item.alt ?? ""}
                     loading="lazy"
                   />
                 ) : (
-                  <span className="ad-media-tile__thumb grid place-items-center text-faint">
+                  <span className="bwa-media-tile__thumb grid place-items-center text-faint">
                     <PiImageSquareBold size={28} />
                   </span>
                 )}
@@ -308,7 +308,7 @@ export function MediaLibrary({ mode, onPick, imagesOnly }: Props) {
           {cursor && !loading ? (
             <div className="mt-4 text-center">
               <button
-                className="ad-btn ad-btn--outline"
+                className="bwa-btn bwa-btn--outline"
                 onClick={() => load(true, cursor)}
               >
                 もっと見る
@@ -413,7 +413,7 @@ function MediaDetail({
       <label className="grid gap-1">
         <span className="text-[12.5px] text-muted">代替テキスト (alt)</span>
         <textarea
-          className="ad-textarea"
+          className="bwa-textarea"
           rows={2}
           value={alt}
           onChange={(event) => setAlt(event.target.value)}
@@ -422,14 +422,14 @@ function MediaDetail({
       </label>
       <div className="flex flex-wrap gap-1">
         <button
-          className="ad-btn ad-btn--outline ad-btn--sm"
+          className="bwa-btn bwa-btn--outline bwa-btn--sm"
           onClick={saveAlt}
           disabled={saving || alt === (item.alt ?? "")}
         >
           alt を保存
         </button>
         <button
-          className="ad-btn ad-btn--outline ad-btn--sm"
+          className="bwa-btn bwa-btn--outline bwa-btn--sm"
           onClick={() =>
             copy(absoluteUrl).then(() => toast("URL をコピーしました"))
           }
@@ -438,7 +438,7 @@ function MediaDetail({
           URL
         </button>
         <button
-          className="ad-btn ad-btn--outline ad-btn--sm"
+          className="bwa-btn bwa-btn--outline bwa-btn--sm"
           onClick={() =>
             copy(markdown).then(() => toast("Markdown をコピーしました"))
           }
@@ -472,7 +472,7 @@ function MediaDetail({
         )}
       </div>
       <button
-        className="ad-btn ad-btn--danger justify-self-start"
+        className="bwa-btn bwa-btn--danger justify-self-start"
         onClick={() => setConfirmDelete(true)}
       >
         <PiTrashBold />
@@ -490,7 +490,7 @@ function MediaDetail({
           onClose={() => setConfirmDelete(false)}
         >
           {usage.length > 0 ? (
-            <div className="ad-callout mb-3" data-tone="danger">
+            <div className="bwa-callout mb-3" data-tone="danger">
               <PiWarningBold />
               <div>
                 <p className="font-medium">
@@ -537,14 +537,14 @@ export function MediaPickerDialog({
           }}
         >
           <input
-            className="ad-input"
+            className="bwa-input"
             type="url"
             placeholder="https://… (URL を直接入力)"
             aria-label="画像の URL"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
           />
-          <button className="ad-btn ad-btn--outline" type="submit">
+          <button className="bwa-btn bwa-btn--outline" type="submit">
             URL を使う
           </button>
         </form>

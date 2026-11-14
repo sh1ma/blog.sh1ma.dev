@@ -176,11 +176,11 @@ export function PostList() {
   if (loading && rows.length === 0) body = <Spinner />
   else if (error) {
     body = (
-      <div className="ad-callout mt-6" data-tone="danger">
+      <div className="bwa-callout mt-6" data-tone="danger">
         <PiWarningBold />
         <div>
           <p>記事を読み込めませんでした: {error}</p>
-          <button className="ad-btn ad-btn--outline mt-2" onClick={reload}>
+          <button className="bwa-btn bwa-btn--outline mt-2" onClick={reload}>
             再読み込み
           </button>
         </div>
@@ -189,7 +189,7 @@ export function PostList() {
   } else if (view === "table") {
     body = (
       <div className="overflow-x-auto">
-        <table className="ad-table min-w-[760px]">
+        <table className="bwa-table min-w-[760px]">
           <thead>
             <tr>
               {header("title", "タイトル")}
@@ -246,7 +246,7 @@ export function PostList() {
     )
   } else {
     body = (
-      <div className="ad-gallery">
+      <div className="bwa-gallery">
         {visible.map((row) => {
           const cover = layout.coverField
             ? String(row.data[layout.coverField] ?? "")
@@ -255,17 +255,17 @@ export function PostList() {
             <Link
               key={row.item.id}
               to={`/posts/${row.item.id}`}
-              className="ad-card no-underline"
+              className="bwa-card no-underline"
             >
               {cover ? (
                 <img
-                  className="ad-card__cover"
+                  className="bwa-card__cover"
                   src={cover}
                   alt=""
                   loading="lazy"
                 />
               ) : (
-                <div className="ad-card__cover" />
+                <div className="bwa-card__cover" />
               )}
               <div className="grid gap-1.5 p-3">
                 <span className="flex items-center gap-2 font-medium">
@@ -291,14 +291,14 @@ export function PostList() {
   }
 
   return (
-    <div className="ad-page">
-      <h1 className="ad-page__title">記事</h1>
+    <div className="bwa-page">
+      <h1 className="bwa-page__title">記事</h1>
       <p className="mb-6 text-muted">
         {rows.length} 件 · 行をクリックすると編集画面を開きます
       </p>
 
       {stashes.length > 0 ? (
-        <div className="ad-callout mb-4" data-tone="warning" role="status">
+        <div className="bwa-callout mb-4" data-tone="warning" role="status">
           <PiWarningBold />
           <div className="grid gap-1">
             <p>
@@ -316,7 +316,7 @@ export function PostList() {
                   <Link
                     key={entry.key}
                     to={to}
-                    className="ad-btn ad-btn--sm ad-btn--outline"
+                    className="bwa-btn bwa-btn--sm bwa-btn--outline"
                   >
                     {title}
                     <span className="text-faint">
@@ -333,7 +333,7 @@ export function PostList() {
       <div className="mb-2 flex flex-wrap items-center gap-1">
         <div className="mr-2 flex">
           <button
-            className="ad-btn"
+            className="bwa-btn"
             aria-pressed={view === "table"}
             data-active={view === "table"}
             onClick={() => changeView("table")}
@@ -342,7 +342,7 @@ export function PostList() {
             テーブル
           </button>
           <button
-            className="ad-btn"
+            className="bwa-btn"
             aria-pressed={view === "gallery"}
             onClick={() => changeView("gallery")}
           >
@@ -355,7 +355,7 @@ export function PostList() {
         </label>
         <select
           id="filter-state"
-          className="ad-select !w-auto"
+          className="bwa-select !w-auto"
           value={stateFilter}
           onChange={(event) => setStateFilter(event.target.value)}
         >
@@ -370,7 +370,7 @@ export function PostList() {
         </label>
         <select
           id="filter-tag"
-          className="ad-select !w-auto max-w-[180px]"
+          className="bwa-select !w-auto max-w-[180px]"
           value={tagFilter}
           onChange={(event) => setTagFilter(event.target.value)}
         >
@@ -386,7 +386,7 @@ export function PostList() {
         </label>
         <select
           id="filter-locale"
-          className="ad-select !w-auto"
+          className="bwa-select !w-auto"
           value={localeFilter}
           onChange={(event) => setLocaleFilter(event.target.value)}
         >
@@ -397,7 +397,7 @@ export function PostList() {
         <div className="relative ml-auto">
           <PiMagnifyingGlassBold className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-faint" />
           <input
-            className="ad-input !w-56 pl-7"
+            className="bwa-input !w-56 pl-7"
             type="search"
             placeholder="検索"
             aria-label="記事を検索"
@@ -405,7 +405,7 @@ export function PostList() {
             onChange={(event) => setQuery(event.target.value)}
           />
         </div>
-        <Link to="/posts/new" className="ad-btn ad-btn--primary">
+        <Link to="/posts/new" className="bwa-btn bwa-btn--primary">
           <PiPlusBold />
           新規
         </Link>

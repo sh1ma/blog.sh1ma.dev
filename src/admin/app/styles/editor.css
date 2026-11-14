@@ -3,7 +3,7 @@
  * src/plugins/markdown-editor/editor.css を使い、ここでは変数を管理画面のトークンに付け替えて
  * Notion 風の余白・文字に寄せる。
  */
-.ad-editor.md-editor {
+.bwa-editor.md-editor {
   --md-border: var(--admin-line-strong);
   --md-surface: var(--admin-bg);
   --md-muted: var(--admin-bg-subtle);
@@ -15,7 +15,7 @@
   position: relative;
 }
 
-.ad-editor.md-editor .md-prose {
+.bwa-editor.md-editor .md-prose {
   min-height: 40vh;
   padding: 0.25rem 0 0;
   font-size: 16px;
@@ -23,34 +23,34 @@
   outline: none;
   caret-color: var(--admin-fg);
 }
-.ad-editor.md-editor .md-prose > * + * {
+.bwa-editor.md-editor .md-prose > * + * {
   margin-top: 0.5em;
 }
-.ad-editor.md-editor .md-prose p {
+.bwa-editor.md-editor .md-prose p {
   margin: 0;
 }
-.ad-editor.md-editor .md-prose h1 {
+.bwa-editor.md-editor .md-prose h1 {
   margin-top: 1.6em;
   font-size: 1.875em;
   line-height: 1.3;
 }
-.ad-editor.md-editor .md-prose h2 {
+.bwa-editor.md-editor .md-prose h2 {
   margin-top: 1.4em;
   padding-bottom: 0;
   border-bottom: 0;
   font-size: 1.5em;
   line-height: 1.3;
 }
-.ad-editor.md-editor .md-prose h3 {
+.bwa-editor.md-editor .md-prose h3 {
   margin-top: 1.1em;
   font-size: 1.25em;
 }
 
 /* 空の段落のプレースホルダー (@tiptap/extensions の Placeholder) */
-.ad-editor.md-editor .md-prose p.is-empty::before,
-.ad-editor.md-editor .md-prose h1.is-empty::before,
-.ad-editor.md-editor .md-prose h2.is-empty::before,
-.ad-editor.md-editor .md-prose h3.is-empty::before {
+.bwa-editor.md-editor .md-prose p.is-empty::before,
+.bwa-editor.md-editor .md-prose h1.is-empty::before,
+.bwa-editor.md-editor .md-prose h2.is-empty::before,
+.bwa-editor.md-editor .md-prose h3.is-empty::before {
   content: attr(data-placeholder);
   float: left;
   height: 0;
@@ -64,7 +64,7 @@
 }
 
 /* ブロック左のハンドル */
-.ad-handle {
+.bwa-handle {
   position: absolute;
   left: -52px;
   z-index: 5;
@@ -74,10 +74,10 @@
   opacity: 0;
   transition: opacity 120ms;
 }
-.ad-handle[data-visible="true"] {
+.bwa-handle[data-visible="true"] {
   opacity: 1;
 }
-.ad-handle button {
+.bwa-handle button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -90,21 +90,21 @@
   color: var(--admin-fg-faint);
   cursor: pointer;
 }
-.ad-handle button:hover {
+.bwa-handle button:hover {
   background: var(--admin-hover);
   color: var(--admin-fg-muted);
 }
-.ad-handle button[data-drag] {
+.bwa-handle button[data-drag] {
   width: 18px;
   cursor: grab;
 }
-.ad-handle svg {
+.bwa-handle svg {
   width: 18px;
   height: 18px;
 }
 
 /* 選択時のツールバー */
-.ad-bubble {
+.bwa-bubble {
   display: flex;
   align-items: center;
   gap: 1px;
@@ -113,7 +113,7 @@
   background: var(--admin-bg-elevated);
   box-shadow: var(--admin-shadow);
 }
-.ad-bubble button {
+.bwa-bubble button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -127,17 +127,17 @@
   font: inherit;
   cursor: pointer;
 }
-.ad-bubble button:hover {
+.bwa-bubble button:hover {
   background: var(--admin-hover);
 }
-.ad-bubble button[aria-pressed="true"] {
+.bwa-bubble button[aria-pressed="true"] {
   color: var(--admin-accent);
 }
-.ad-bubble svg {
+.bwa-bubble svg {
   width: 17px;
   height: 17px;
 }
-.ad-bubble__sep {
+.bwa-bubble__sep {
   width: 1px;
   height: 18px;
   margin: 0 2px;
@@ -145,13 +145,13 @@
 }
 
 /* スラッシュメニュー */
-.ad-slash {
+.bwa-slash {
   width: 320px;
 }
-.ad-slash .ad-menu-item {
+.bwa-slash .bwa-menu-item {
   min-height: 46px;
 }
-.ad-slash__icon {
+.bwa-slash__icon {
   flex: none;
   display: flex;
   align-items: center;
@@ -162,22 +162,22 @@
   background: var(--admin-bg);
   box-shadow: 0 0 0 1px var(--admin-line-strong);
 }
-.ad-slash__icon svg {
+.bwa-slash__icon svg {
   width: 20px;
   height: 20px;
   color: var(--admin-fg);
 }
-.ad-slash__text {
+.bwa-slash__text {
   display: grid;
   min-width: 0;
 }
-.ad-slash__desc {
+.bwa-slash__desc {
   color: var(--admin-fg-muted);
   font-size: 12px;
 }
 
 /* Markdown ソース */
-.ad-source {
+.bwa-source {
   display: block;
   width: 100%;
   min-height: 60vh;
@@ -193,7 +193,7 @@
   resize: vertical;
   tab-size: 2;
 }
-.ad-source:focus {
+.bwa-source:focus {
   outline: none;
   box-shadow: inset 0 0 0 1px var(--admin-accent);
 }

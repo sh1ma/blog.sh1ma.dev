@@ -365,7 +365,7 @@ export function NotionEditor({
   }
 
   return (
-    <div className="ad-editor md-editor" data-markdown-editor="">
+    <div className="bwa-editor md-editor" data-markdown-editor="">
       <style>{editorCss}</style>
       {editor && !readOnly ? <BlockHandle editor={editor} /> : null}
       {editor && !readOnly ? (
@@ -479,7 +479,7 @@ function SlashMenu({
       anchor={anchor}
       onClose={() => {}}
       keepFocus
-      className="ad-slash"
+      className="bwa-slash"
       label="ブロックを挿入"
     >
       <div
@@ -497,7 +497,7 @@ function SlashMenu({
           return (
             <div key={command.id}>
               {header ? (
-                <div className="ad-menu-label">{command.group}</div>
+                <div className="bwa-menu-label">{command.group}</div>
               ) : null}
               <button
                 type="button"
@@ -505,17 +505,17 @@ function SlashMenu({
                 aria-selected={index === activeIndex}
                 data-index={index}
                 data-active={index === activeIndex}
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onMouseDown={(event) => event.preventDefault()}
                 onMouseEnter={() => onHover(index)}
                 onClick={() => onSelect(command)}
               >
-                <span className="ad-slash__icon">
+                <span className="bwa-slash__icon">
                   {COMMAND_ICONS[command.id]}
                 </span>
-                <span className="ad-slash__text">
+                <span className="bwa-slash__text">
                   <span>{command.label}</span>
-                  <span className="ad-slash__desc">{command.description}</span>
+                  <span className="bwa-slash__desc">{command.description}</span>
                 </span>
               </button>
             </div>
@@ -634,7 +634,7 @@ function BlockHandle({ editor }: { editor: Editor }) {
     <>
       <div
         ref={handleRef}
-        className="ad-handle"
+        className="bwa-handle"
         data-visible="true"
         style={{ top: block.top }}
         data-testid="block-handle"
@@ -678,13 +678,13 @@ function BlockHandle({ editor }: { editor: Editor }) {
         <Popover anchor={menuAnchor} onClose={close} label="ブロックのメニュー">
           {convertOpen ? (
             <div role="menu" aria-label="変換">
-              <div className="ad-menu-label">変換</div>
+              <div className="bwa-menu-label">変換</div>
               {SLASH_COMMANDS.filter((command) => command.convertible).map(
                 (command) => (
                   <button
                     key={command.id}
                     role="menuitem"
-                    className="ad-menu-item"
+                    className="bwa-menu-item"
                     onClick={() => {
                       convertBlock(editor, menu, command.id)
                       close()
@@ -700,16 +700,16 @@ function BlockHandle({ editor }: { editor: Editor }) {
             <div role="menu" aria-label="ブロックのメニュー">
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={() => setConvertOpen(true)}
               >
                 <PiTextTBold />
                 変換
-                <span className="ad-menu-item__hint">›</span>
+                <span className="bwa-menu-item__hint">›</span>
               </button>
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={() => {
                   duplicateBlock(editor, menu)
                   close()
@@ -720,7 +720,7 @@ function BlockHandle({ editor }: { editor: Editor }) {
               </button>
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={() => {
                   moveBlock(editor, menu, -1)
                   close()
@@ -731,7 +731,7 @@ function BlockHandle({ editor }: { editor: Editor }) {
               </button>
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={() => {
                   moveBlock(editor, menu, 1)
                   close()
@@ -742,7 +742,7 @@ function BlockHandle({ editor }: { editor: Editor }) {
               </button>
               <button
                 role="menuitem"
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onClick={() => {
                   insertBlockBelow(editor, menu)
                   close()
@@ -751,10 +751,10 @@ function BlockHandle({ editor }: { editor: Editor }) {
                 <PiPlusBold />
                 下にブロックを追加
               </button>
-              <div className="ad-menu-sep" />
+              <div className="bwa-menu-sep" />
               <button
                 role="menuitem"
-                className="ad-menu-item ad-menu-item--danger"
+                className="bwa-menu-item bwa-menu-item--danger"
                 onClick={() => {
                   deleteBlock(editor, menu)
                   close()
@@ -842,7 +842,7 @@ function BubbleToolbar({
       }}
     >
       <div
-        className="ad-bubble"
+        className="bwa-bubble"
         role="toolbar"
         aria-label="書式"
         data-testid="bubble-toolbar"
@@ -871,7 +871,7 @@ function BubbleToolbar({
           () => editor.chain().focus().toggleCode().run(),
           <PiCodeBold />,
         )}
-        <span className="ad-bubble__sep" />
+        <span className="bwa-bubble__sep" />
         {button(
           "リンク",
           state?.link,
@@ -899,14 +899,14 @@ function BubbleToolbar({
             }}
           >
             <input
-              className="ad-input"
+              className="bwa-input"
               type="url"
               placeholder="https://"
               aria-label="リンク先の URL"
               value={href}
               onChange={(event) => setHref(event.target.value)}
             />
-            <button className="ad-btn ad-btn--primary" type="submit">
+            <button className="bwa-btn bwa-btn--primary" type="submit">
               {href.trim() ? "設定" : "解除"}
             </button>
           </form>
@@ -936,11 +936,11 @@ function MathDialog({
       onClose={onClose}
       footer={
         <>
-          <button className="ad-btn ad-btn--outline" onClick={onClose}>
+          <button className="bwa-btn bwa-btn--outline" onClick={onClose}>
             キャンセル
           </button>
           <button
-            className="ad-btn ad-btn--primary"
+            className="bwa-btn bwa-btn--primary"
             onClick={() => onApply(latex)}
           >
             {request.pos !== null && !latex.trim() ? "削除" : "決定"}
@@ -949,7 +949,7 @@ function MathDialog({
       }
     >
       <textarea
-        className="ad-textarea font-mono"
+        className="bwa-textarea font-mono"
         rows={4}
         aria-label="LaTeX"
         placeholder="\int_0^1 x\,dx"
@@ -1000,7 +1000,7 @@ function LinkCardDialog({
           になります。
         </p>
         <input
-          className="ad-input"
+          className="bwa-input"
           type="url"
           placeholder="https://example.com/"
           aria-label="URL"
@@ -1009,7 +1009,7 @@ function LinkCardDialog({
         />
         <div className="flex justify-end">
           <button
-            className="ad-btn ad-btn--primary"
+            className="bwa-btn bwa-btn--primary"
             type="submit"
             disabled={!valid}
           >

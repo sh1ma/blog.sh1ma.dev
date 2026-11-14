@@ -108,7 +108,7 @@ export function Popover({
   return createPortal(
     <div
       ref={ref}
-      className={`ad-popover ${className}`}
+      className={`bwa-popover ${className}`}
       style={style}
       role="dialog"
       aria-label={label}
@@ -159,22 +159,22 @@ export function Dialog({
   }, [])
   return createPortal(
     <div
-      className="ad-overlay"
+      className="bwa-overlay"
       onPointerDown={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
     >
       <div
         ref={ref}
-        className={`ad-dialog ${wide ? "ad-dialog--wide" : ""} ${className}`}
+        className={`bwa-dialog ${wide ? "bwa-dialog--wide" : ""} ${className}`}
         role="dialog"
         aria-modal="true"
         aria-label={title}
       >
-        <div className="ad-dialog__header">
-          <h2 className="ad-dialog__title">{title}</h2>
+        <div className="bwa-dialog__header">
+          <h2 className="bwa-dialog__title">{title}</h2>
           <button
-            className="ad-btn ad-btn--icon ad-btn--muted"
+            className="bwa-btn bwa-btn--icon bwa-btn--muted"
             onClick={onClose}
             aria-label="閉じる"
             data-close=""
@@ -182,8 +182,8 @@ export function Dialog({
             <PiXBold />
           </button>
         </div>
-        <div className="ad-dialog__body">{children}</div>
-        {footer ? <div className="ad-dialog__footer">{footer}</div> : null}
+        <div className="bwa-dialog__body">{children}</div>
+        {footer ? <div className="bwa-dialog__footer">{footer}</div> : null}
       </div>
     </div>,
     document.body,
@@ -213,11 +213,11 @@ export function ConfirmDialog({
       onClose={onClose}
       footer={
         <>
-          <button className="ad-btn ad-btn--outline" onClick={onClose}>
+          <button className="bwa-btn bwa-btn--outline" onClick={onClose}>
             キャンセル
           </button>
           <button
-            className={`ad-btn ${danger ? "ad-btn--danger-solid" : "ad-btn--primary"}`}
+            className={`bwa-btn ${danger ? "bwa-btn--danger-solid" : "bwa-btn--primary"}`}
             onClick={onConfirm}
             disabled={busy}
             data-autofocus=""
@@ -240,7 +240,7 @@ export function TagChip({
   onRemove?: () => void
 }) {
   return (
-    <span className="ad-chip" data-color={tagColor(name)} title={name}>
+    <span className="bwa-chip" data-color={tagColor(name)} title={name}>
       {name}
       {onRemove ? (
         <button
@@ -257,7 +257,7 @@ export function TagChip({
 
 export function StateBadge({ state }: { state: PostState }) {
   return (
-    <span className="ad-state" data-state={state}>
+    <span className="bwa-state" data-state={state}>
       {STATE_LABELS[state]}
     </span>
   )

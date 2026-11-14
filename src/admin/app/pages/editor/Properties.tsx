@@ -79,12 +79,14 @@ function Row({
   htmlFor?: string
 }) {
   return (
-    <div className="ad-prop">
-      <label className="ad-prop__name" htmlFor={htmlFor}>
+    <div className="bwa-prop">
+      <label className="bwa-prop__name" htmlFor={htmlFor}>
         {icon}
         <span className="truncate">{label}</span>
       </label>
-      <div className={`ad-prop__value ${hover ? "ad-prop__value--hover" : ""}`}>
+      <div
+        className={`bwa-prop__value ${hover ? "bwa-prop__value--hover" : ""}`}
+      >
         {children}
       </div>
     </div>
@@ -221,7 +223,7 @@ export function Properties({
   }
 
   return (
-    <section className="ad-props" aria-label="プロパティ">
+    <section className="bwa-props" aria-label="プロパティ">
       {state ? (
         <Row label="状態" icon={<PiCircleDashedBold />} hover={false}>
           <StateBadge state={state} />
@@ -247,7 +249,7 @@ export function Properties({
             />
             <span
               id="prop-slug-hint"
-              className="ad-prop__hint"
+              className="bwa-prop__hint"
               data-tone={slug.check.ok ? undefined : "error"}
             >
               {slug.check.ok
@@ -271,7 +273,7 @@ export function Properties({
         <>
           <button
             type="button"
-            className="ad-btn ad-btn--muted ad-btn--sm mt-1"
+            className="bwa-btn bwa-btn--muted bwa-btn--sm mt-1"
             aria-expanded={more}
             onClick={() => setMore((open) => !open)}
           >
@@ -367,7 +369,7 @@ function TagInput({
         <button
           ref={button}
           type="button"
-          className="ad-btn ad-btn--sm ad-btn--muted"
+          className="bwa-btn bwa-btn--sm bwa-btn--muted"
           aria-label={`${label}を追加`}
           onClick={() => setOpen(true)}
         >
@@ -382,7 +384,7 @@ function TagInput({
           label={`${label}を選ぶ`}
         >
           <input
-            className="ad-input mb-1"
+            className="bwa-input mb-1"
             placeholder="タグを検索・作成"
             aria-label="タグを検索・作成"
             value={query}
@@ -404,7 +406,7 @@ function TagInput({
                 role="option"
                 aria-selected={index === active}
                 data-active={index === active}
-                className="ad-menu-item"
+                className="bwa-menu-item"
                 onMouseEnter={() => setActive(index)}
                 onClick={() => add(entry.name)}
               >
