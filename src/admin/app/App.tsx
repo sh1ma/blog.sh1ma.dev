@@ -1,4 +1,3 @@
-import "./styles/admin.css"
 import {
   lazy,
   type ReactNode,

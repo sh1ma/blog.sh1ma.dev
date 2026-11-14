@@ -326,6 +326,11 @@ export function PostEditor({ route }: { route: EditorRoute }) {
     }
   }, [])
 
+  // 新規はすぐタイトルを書けるように (Notion と同じ)
+  useEffect(() => {
+    if (ready && !itemRef.current) titleRef.current?.focus()
+  }, [ready])
+
   // --- 後片付け: 保存しきれていない分を送り、ロックを返す
   useEffect(() => {
     return () => {

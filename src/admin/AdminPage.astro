@@ -1,6 +1,9 @@
 ---
 // 自前の管理画面 (記事一覧・編集・メディア・タグ) の入り口。integration.ts が
 // routes.ts の pattern に inject する。中身はクライアントの SPA (app/App.tsx)。
+// CSS は ?url で取り込んで、このページにだけ <link> で置く。client:only の部品から
+// import すると、Astro が公開ページにもこの CSS を付けてしまう (EmDash の admin.astro と同じやり方)
+import adminStylesUrl from "./app/styles/admin.css?url"
 import AdminApp from "./app/App"
 import { accessForRole, ROLE_LABELS } from "./permissions"
 import { CLASSIC_PARAM, CLASSIC_SHELL_PATH, classicUrl } from "./routes"
@@ -39,6 +42,7 @@ const me = user
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>blog.sh1ma.dev 管理画面</title>
+    <link rel="stylesheet" href={adminStylesUrl} />
     <script is:inline>
       // 画面が出る前にテーマを決める (ちらつき防止)。保存した選択 → OS の設定の順
       ;(() => {
