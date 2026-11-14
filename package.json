@@ -31,9 +31,9 @@
     "test:e2e:server": "pnpm test:e2e:prepare && HOST=127.0.0.1 PORT=8787 node ./dist/server/entry.mjs"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.4.3",
-    "@astrojs/react": "^7.1.2",
-    "@emdash-cms/cloudflare": "^1.4.0",
+    "@astrojs/cloudflare": "^14.4.7",
+    "@astrojs/react": "^7.1.8",
+    "@emdash-cms/cloudflare": "^1.5.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tiptap/core": "3.32.2",
     "@tiptap/extension-code": "3.32.2",
@@ -45,7 +45,7 @@
     "@tiptap/react": "3.32.2",
     "@tiptap/starter-kit": "3.32.2",
     "astro": "^7.4.4",
-    "emdash": "^1.4.0",
+    "emdash": "^1.5.0",
     "feed": "^6.0.0",
     "katex": "^0.19.1",
     "react": "19.3.1",
@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@astrojs/node": "^11.1.9",
+    "@astrojs/node": "^11.1.12",
     "@biomejs/biome": "^2.5.15",
     "@cloudflare/build-output-utils": "^0.9.7",
     "@cloudflare/workers-types": "^5.20261102.1",
