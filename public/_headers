@@ -1,5 +1,0 @@
-/_next/static/*
-  Cache-Control: public,max-age=31536000,immutable
-
-/feed
-  Content-Type: application/rss+xml; charset=utf-8

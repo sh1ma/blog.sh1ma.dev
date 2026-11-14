@@ -1,0 +1,52 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blog",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-10-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [{ "pattern": "blog.sh1ma.dev", "custom_domain": true }],
+  "vars": {
+    "EMDASH_SITE_URL": "https://blog.sh1ma.dev",
+  },
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true },
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "blog-emdash",
+      "database_id": "416f10ff-1fde-44eb-ab0d-121f3a5612a9",
+    },
+  ],
+  "kv_namespaces": [
+    { "binding": "SESSION", "id": "6af0e9957952470b949e44940ec635c0" },
+  ],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "blog-emdash-media" }],
+  "triggers": { "crons": ["* * * * *"] },
+  "env": {
+    "staging": {
+      "name": "blog-staging",
+      "workers_dev": true,
+      "preview_urls": true,
+      "routes": [],
+      "vars": {
+        "EMDASH_SITE_URL": "https://blog-staging.sh1ma.workers.dev",
+        "EMDASH_ADMIN_DISABLED": "1",
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "blog-emdash-staging",
+          "database_id": "dd29ce39-7487-452e-8888-501c55cbf6b9",
+        },
+      ],
+      "r2_buckets": [
+        { "binding": "MEDIA", "bucket_name": "blog-emdash-media-staging" },
+      ],
+      "triggers": { "crons": ["* * * * *"] },
+    },
+  },
+}

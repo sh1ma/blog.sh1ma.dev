@@ -1,7 +1,9 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" },
-  ],
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "src/**/*", "lib/**/*", "scripts/**/*"],
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types", "node"],
+    "jsx": "react-jsx",
+  },
 }

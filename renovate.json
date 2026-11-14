@@ -15,35 +15,33 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "description": "TanStack ecosystem (router / query) をまとめて更新",
-      "matchPackageNames": ["/^@tanstack//"],
-      "groupName": "tanstack"
+      "description": "Astro / EmDash 関連ツール",
+      "matchPackageNames": [
+        "astro",
+        "/^@astrojs//",
+        "emdash",
+        "/^@emdash-cms//"
+      ],
+      "groupName": "astro-emdash"
     },
     {
       "description": "Cloudflare 関連ツール",
-      "matchPackageNames": ["cf", "@cloudflare/vite-plugin"],
+      "matchPackageNames": [
+        "cf",
+        "@cloudflare/build-output-utils",
+        "@cloudflare/workers-types"
+      ],
       "groupName": "cloudflare"
     },
     {
-      "description": "Vite プラグイン / ビルドツールチェイン",
-      "matchPackageNames": ["vite", "/^@vitejs//"],
-      "groupName": "vite"
+      "description": "Tailwind CSS",
+      "matchPackageNames": ["tailwindcss", "/^@tailwindcss//"],
+      "groupName": "tailwind"
     },
     {
-      "description": "Content Collections / markdown 変換系",
-      "matchPackageNames": [
-        "/^@content-collections//",
-        "/^rehype-/",
-        "/^remark/",
-        "shiki",
-        "feed"
-      ],
-      "groupName": "content-collections-markdown"
-    },
-    {
-      "description": "OGP 生成 (satori + resvg)",
-      "matchPackageNames": ["satori", "@resvg/resvg-js"],
-      "groupName": "ogp"
+      "description": "Markdown 変換系",
+      "matchPackageNames": ["/^rehype-/", "/^remark/", "shiki", "feed"],
+      "groupName": "markdown"
     },
     {
       "description": "Biome (lint/format)",
@@ -79,11 +77,6 @@
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["automated", "chore", "major-update"]
-    },
-    {
-      "description": "js-yaml は 4.0.0 で safeLoad が削除され、gray-matter@4 (記事の frontmatter 解析に使用) が動かなくなるため 3.x に固定する。脆弱性は 3.15.0 で修正済みで、pnpm overrides もその下限を保証している",
-      "matchPackageNames": ["js-yaml"],
-      "allowedVersions": "<4"
     }
   ],
   "lockFileMaintenance": {

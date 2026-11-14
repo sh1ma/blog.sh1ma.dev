@@ -1,0 +1,51 @@
+---
+import { BlogHeader } from "../components/BlogHeader/BlogHeader"
+import { Footer } from "../components/Footer/Footer"
+import "../globals.css"
+import "katex/dist/katex.min.css"
+
+interface Props {
+  title: string
+  description: string
+  locale: "ja" | "en"
+  translationHref?: string
+  ogImage?: string
+  ogType?: "article" | "website"
+}
+
+const { title, description, locale, translationHref, ogImage = "/anon-icon.png", ogType = "website" } = Astro.props
+const pathname = Astro.url.pathname
+const canonical = new URL(pathname, Astro.url.origin).href
+const imageUrl = new URL(ogImage, Astro.url.origin).href
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="alternate" type="application/rss+xml" title="blog.sh1ma.dev" href={locale === "en" ? "/en/feed" : "/feed"} />
+    <link rel="canonical" href={canonical} />
+    {translationHref && <link rel="alternate" hreflang={locale} href={canonical} />}
+    {translationHref && <link rel="alternate" hreflang={locale === "ja" ? "en" : "ja"} href={new URL(translationHref, Astro.url.origin).href} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content={ogType === "article" ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col">
+      <BlogHeader pathname={pathname} translationHref={translationHref} client:load />
+      <div class="flex-1"><slot /></div>
+      <Footer pathname={pathname} />
+    </div>
+  </body>
+</html>
