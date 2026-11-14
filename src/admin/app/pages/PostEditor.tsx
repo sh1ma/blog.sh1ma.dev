@@ -8,6 +8,7 @@ import {
   useState,
 } from "react"
 import {
+  PiArrowClockwiseBold,
   PiArrowSquareOutBold,
   PiArrowsOutLineHorizontalBold,
   PiClockCounterClockwiseBold,
@@ -15,6 +16,7 @@ import {
   PiDotsThreeBold,
   PiEyeBold,
   PiImageBold,
+  PiLinkSimpleBold,
   PiLockSimpleBold,
   PiMarkdownLogoBold,
   PiTranslateBold,
@@ -31,6 +33,7 @@ import type {
 } from "../api/types"
 import { MediaPickerDialog } from "../components/MediaLibrary"
 import { ConfirmDialog, Dialog, Popover, Spinner } from "../components/ui"
+import { refreshLinkCards } from "../editor/link-card-extension"
 import { NotionEditor } from "../editor/NotionEditor"
 import { Autosave, type SaveState } from "../lib/autosave"
 import {
@@ -671,6 +674,49 @@ export function PostEditor({ route }: { route: EditorRoute }) {
     setMode(next)
   }
 
+  /** この記事のリンクカードの OGP をサーバーで取り直す */
+  const refreshCards = async () => {
+    setMoreOpen(false)
+    const editor = editorRef.current
+    if (!editor) return
+    toast("リンクカードを取り直しています…")
+    const { total, failed } = await refreshLinkCards(editor)
+    if (total === 0) toast("この記事にリンクカードはありません")
+    else if (failed > 0)
+      toast(
+        `${total} 件のうち ${failed} 件のリンクカードを取得できませんでした`,
+        "error",
+      )
+    else toast(`${total} 件のリンクカードを取り直しました`)
+  }
+
+  /** 全記事のリンクカードのうち、まだ OGP を取っていないものを取る */
+  const backfillCards = async () => {
+    setMoreOpen(false)
+    toast("全記事のリンクカードを確認しています…")
+    const total = { posts: 0, fetched: 0, failed: 0 }
+    try {
+      let cursor: string | null = null
+      for (let round = 0; round < 500; round++) {
+        const result = await api.linkCardBackfill(cursor)
+        total.posts += result.pending > 0 ? 0 : result.posts
+        total.fetched += result.fetched
+        total.failed += result.failed
+        cursor = result.cursor
+        if (!cursor) break
+      }
+      toast(
+        `${total.posts} 記事を確認し、${total.fetched} 件の OGP を取得しました` +
+          (total.failed > 0
+            ? ` (${total.failed} 件は取得できませんでした)`
+            : ""),
+        total.failed > 0 ? "error" : undefined,
+      )
+    } catch (error) {
+      toast(error instanceof Error ? error.message : String(error), "error")
+    }
+  }
+
   const toggleFullWidth = () => {
     setFullWidth((value) => {
       try {
@@ -860,6 +906,27 @@ export function PostEditor({ route }: { route: EditorRoute }) {
                 <PiArrowsOutLineHorizontalBold />
                 {fullWidth ? "標準の幅にする" : "全幅にする"}
               </button>
+              {mode === "wysiwyg" ? (
+                <button
+                  role="menuitem"
+                  className="bwa-menu-item"
+                  onClick={() => void refreshCards()}
+                >
+                  <PiArrowClockwiseBold />
+                  リンクカードを再取得
+                </button>
+              ) : null}
+              {access.canEditAny ? (
+                <button
+                  role="menuitem"
+                  className="bwa-menu-item"
+                  onClick={() => void backfillCards()}
+                  title="全記事のリンクカードのうち、まだ OGP を取っていないものを取得する"
+                >
+                  <PiLinkSimpleBold />
+                  全記事のリンクカードを取得
+                </button>
+              ) : null}
               {item ? (
                 <a
                   role="menuitem"

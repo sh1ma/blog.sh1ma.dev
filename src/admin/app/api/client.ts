@@ -3,6 +3,11 @@
 // 純正の管理画面のクライアント (@emdash-cms/admin の src/lib/api/*.ts) に合わせている。
 // fetch を差し替えられるようにしてあるのは単体テスト (client.test.ts) のため。
 
+import {
+  PLUGIN_ID as LINK_CARDS_PLUGIN_ID,
+  ROUTES,
+} from "../../../plugins/link-cards/constants"
+import type { OgpLookup } from "../../../plugins/link-cards/service"
 import type {
   CollectionSchema,
   ContentItem,
@@ -286,7 +291,36 @@ export function createApi(
 
     deleteMedia: (id: string) =>
       request<unknown>(`/media/${enc(id)}`, { method: "DELETE" }),
+
+    // --- リンクカード (src/plugins/link-cards/plugin.ts の routes)
+    /** 保存済みの OGP。無ければサーバーが取得して保存する */
+    linkCardOgp: (url: string) =>
+      request<OgpLookup>(`${linkCards(ROUTES.ogp)}${query({ url })}`),
+
+    linkCardRefresh: (url: string) =>
+      request<OgpLookup>(linkCards(ROUTES.refresh), {
+        method: "POST",
+        json: { url },
+      }),
+
+    /** 全記事のリンクカードのうち未取得のものを数記事ずつ取る。cursor が null になるまで呼ぶ */
+    linkCardBackfill: (cursor: string | null) =>
+      request<LinkCardBackfillResult>(linkCards(ROUTES.backfill), {
+        method: "POST",
+        json: cursor ? { cursor } : {},
+      }),
   }
+}
+
+const linkCards = (route: string) => `/plugins/${LINK_CARDS_PLUGIN_ID}/${route}`
+
+export type LinkCardBackfillResult = {
+  posts: number
+  urls: number
+  fetched: number
+  failed: number
+  pending: number
+  cursor: string | null
 }
 
 export type Api = ReturnType<typeof createApi>

@@ -62,8 +62,10 @@ import {
   renderLatex,
 } from "../../../plugins/markdown-editor/node-views"
 import { createSerializer } from "../../../plugins/markdown-editor/serializer"
+import { api } from "../api/client"
 import { MediaPickerDialog } from "../components/MediaLibrary"
 import { Dialog, Popover } from "../components/ui"
+import { createOgpStore } from "../lib/ogp-store"
 import {
   SLASH_COMMANDS,
   type SlashCommand,
@@ -78,6 +80,8 @@ import {
   moveBlock,
   runSlashCommand,
 } from "./commands"
+import { LinkCardPopover } from "./LinkCardPopover"
+import { LinkCards } from "./link-card-extension"
 import { createSlashExtension, type SlashState } from "./slash"
 
 // 記事の本文を Notion のように書くエディタ。
@@ -157,6 +161,10 @@ export function NotionEditor({
   const [math, setMath] = useState<MathRequest | null>(null)
   const [imagePicker, setImagePicker] = useState<number | null | false>(false)
   const [linkCard, setLinkCard] = useState(false)
+  // リンクカードの OGP (src/plugins/link-cards の API)。この画面の間だけ覚えておく
+  const [ogpStore] = useState(() =>
+    createOgpStore({ get: api.linkCardOgp, refresh: api.linkCardRefresh }),
+  )
 
   const insertUploads = useCallback(
     async (files: File[], pos: number | null) => {
@@ -211,6 +219,7 @@ export function NotionEditor({
         showOnlyCurrent: true,
         includeChildren: false,
       }),
+      LinkCards.configure({ store: ogpStore }),
       createSlashExtension({
         onOpen: (state) => {
           setSlash((previous) => {
@@ -255,7 +264,7 @@ export function NotionEditor({
         }),
       }),
     ],
-    [selectSlash],
+    [selectSlash, ogpStore],
   )
 
   const editor = useEditor({
@@ -380,6 +389,7 @@ export function NotionEditor({
         />
       ) : null}
       <EditorContent editor={editor} />
+      {editor ? <LinkCardPopover editor={editor} store={ogpStore} /> : null}
 
       {slash ? (
         <SlashMenu
