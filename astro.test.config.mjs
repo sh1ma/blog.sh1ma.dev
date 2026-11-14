@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import emdash, { local } from "emdash/astro"
 import { sqlite } from "emdash/db"
+import { notionAdmin } from "./src/admin/integration"
 import { markdownEditorPlugin } from "./src/plugins/markdown-editor"
 
 export default defineConfig({
@@ -27,5 +28,6 @@ export default defineConfig({
       }),
       plugins: [markdownEditorPlugin()],
     }),
+    notionAdmin(),
   ],
 })

@@ -1,0 +1,199 @@
+/*
+ * 全画面エディタ。node view (コード・アラート・数式など) の見た目は本文ウィジェットと共通の
+ * src/plugins/markdown-editor/editor.css を使い、ここでは変数を管理画面のトークンに付け替えて
+ * Notion 風の余白・文字に寄せる。
+ */
+.ad-editor.md-editor {
+  --md-border: var(--admin-line-strong);
+  --md-surface: var(--admin-bg);
+  --md-muted: var(--admin-bg-subtle);
+  --md-text: var(--admin-fg);
+  --md-subtle: var(--admin-fg-muted);
+  --md-brand: var(--admin-accent);
+  --md-focus: var(--admin-accent);
+  display: block;
+  position: relative;
+}
+
+.ad-editor.md-editor .md-prose {
+  min-height: 40vh;
+  padding: 0.25rem 0 0;
+  font-size: 16px;
+  line-height: 1.75;
+  outline: none;
+  caret-color: var(--admin-fg);
+}
+.ad-editor.md-editor .md-prose > * + * {
+  margin-top: 0.5em;
+}
+.ad-editor.md-editor .md-prose p {
+  margin: 0;
+}
+.ad-editor.md-editor .md-prose h1 {
+  margin-top: 1.6em;
+  font-size: 1.875em;
+  line-height: 1.3;
+}
+.ad-editor.md-editor .md-prose h2 {
+  margin-top: 1.4em;
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: 1.5em;
+  line-height: 1.3;
+}
+.ad-editor.md-editor .md-prose h3 {
+  margin-top: 1.1em;
+  font-size: 1.25em;
+}
+
+/* 空の段落のプレースホルダー (@tiptap/extensions の Placeholder) */
+.ad-editor.md-editor .md-prose p.is-empty::before,
+.ad-editor.md-editor .md-prose h1.is-empty::before,
+.ad-editor.md-editor .md-prose h2.is-empty::before,
+.ad-editor.md-editor .md-prose h3.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--admin-fg-faint);
+  pointer-events: none;
+}
+
+/* ドラッグ中の落とし先 (dropcursor) */
+.ProseMirror-dropcursor {
+  background-color: var(--admin-accent);
+}
+
+/* ブロック左のハンドル */
+.ad-handle {
+  position: absolute;
+  left: -52px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.ad-handle[data-visible="true"] {
+  opacity: 1;
+}
+.ad-handle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  color: var(--admin-fg-faint);
+  cursor: pointer;
+}
+.ad-handle button:hover {
+  background: var(--admin-hover);
+  color: var(--admin-fg-muted);
+}
+.ad-handle button[data-drag] {
+  width: 18px;
+  cursor: grab;
+}
+.ad-handle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 選択時のツールバー */
+.ad-bubble {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border-radius: var(--admin-radius);
+  background: var(--admin-bg-elevated);
+  box-shadow: var(--admin-shadow);
+}
+.ad-bubble button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--admin-radius-sm);
+  background: transparent;
+  color: var(--admin-fg);
+  font: inherit;
+  cursor: pointer;
+}
+.ad-bubble button:hover {
+  background: var(--admin-hover);
+}
+.ad-bubble button[aria-pressed="true"] {
+  color: var(--admin-accent);
+}
+.ad-bubble svg {
+  width: 17px;
+  height: 17px;
+}
+.ad-bubble__sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 2px;
+  background: var(--admin-line-strong);
+}
+
+/* スラッシュメニュー */
+.ad-slash {
+  width: 320px;
+}
+.ad-slash .ad-menu-item {
+  min-height: 46px;
+}
+.ad-slash__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--admin-radius-sm);
+  background: var(--admin-bg);
+  box-shadow: 0 0 0 1px var(--admin-line-strong);
+}
+.ad-slash__icon svg {
+  width: 20px;
+  height: 20px;
+  color: var(--admin-fg);
+}
+.ad-slash__text {
+  display: grid;
+  min-width: 0;
+}
+.ad-slash__desc {
+  color: var(--admin-fg-muted);
+  font-size: 12px;
+}
+
+/* Markdown ソース */
+.ad-source {
+  display: block;
+  width: 100%;
+  min-height: 60vh;
+  padding: 1rem;
+  border: 0;
+  border-radius: var(--admin-radius);
+  background: var(--admin-bg-subtle);
+  box-shadow: inset 0 0 0 1px var(--admin-line);
+  color: var(--admin-fg);
+  font-family: var(--admin-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  resize: vertical;
+  tab-size: 2;
+}
+.ad-source:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--admin-accent);
+}

@@ -1,0 +1,115 @@
+/*
+ * 管理画面のデザイントークン (色・余白・角丸・文字)。ここだけを直せば全体が変わる。
+ * Notion の配色を参考に、アクセントはブログの紫 (src/globals.css の --brand-primary) を控えめに使う。
+ * ライト / ダークは <html data-admin-theme> で切り替える (AdminPage.astro の head で決める)。
+ */
+:root {
+  --admin-font:
+    -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Segoe UI", "Noto Sans JP", system-ui,
+    sans-serif;
+  --admin-mono:
+    ui-monospace, "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+
+  --admin-radius-sm: 4px;
+  --admin-radius: 6px;
+  --admin-radius-lg: 10px;
+  --admin-sidebar-width: 248px;
+  --admin-content-width: 740px;
+  --admin-topbar-height: 44px;
+
+  /* ブログの紫 (#514fc9 / ダークは #7a79d9) */
+  --admin-brand: #514fc9;
+  --admin-brand-strong: #3e3cb3;
+}
+
+[data-admin-theme="light"] {
+  color-scheme: light;
+  --admin-bg: #ffffff;
+  --admin-bg-sidebar: #f8f8f7;
+  --admin-bg-elevated: #ffffff;
+  --admin-bg-subtle: #f7f6f3;
+  --admin-fg: #37352f;
+  --admin-fg-muted: #787774;
+  --admin-fg-faint: #a3a29e;
+  --admin-line: rgba(55, 53, 47, 0.09);
+  --admin-line-strong: rgba(55, 53, 47, 0.16);
+  --admin-hover: rgba(55, 53, 47, 0.06);
+  --admin-active: rgba(55, 53, 47, 0.1);
+  --admin-accent: var(--admin-brand);
+  --admin-accent-soft: rgba(81, 79, 201, 0.1);
+  --admin-accent-fg: #ffffff;
+  --admin-danger: #e03e3e;
+  --admin-danger-soft: rgba(224, 62, 62, 0.08);
+  --admin-success: #448361;
+  --admin-warning: #b7791f;
+  --admin-shadow:
+    rgba(15, 15, 15, 0.05) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 3px 6px,
+    rgba(15, 15, 15, 0.2) 0 9px 24px;
+  --admin-overlay: rgba(15, 15, 15, 0.4);
+
+  /* タグの色 (Notion の色名) */
+  --tag-gray-bg: #e3e2e0;
+  --tag-gray-fg: #32302c;
+  --tag-brown-bg: #eee0da;
+  --tag-brown-fg: #442a1e;
+  --tag-orange-bg: #fadec9;
+  --tag-orange-fg: #49290e;
+  --tag-yellow-bg: #fdecc8;
+  --tag-yellow-fg: #402c1b;
+  --tag-green-bg: #dbeddb;
+  --tag-green-fg: #1c3829;
+  --tag-blue-bg: #d3e5ef;
+  --tag-blue-fg: #183347;
+  --tag-purple-bg: #e8deee;
+  --tag-purple-fg: #412454;
+  --tag-pink-bg: #f5e0e9;
+  --tag-pink-fg: #4c2337;
+  --tag-red-bg: #ffe2dd;
+  --tag-red-fg: #5d1715;
+}
+
+[data-admin-theme="dark"] {
+  color-scheme: dark;
+  --admin-bg: #191919;
+  --admin-bg-sidebar: #202020;
+  --admin-bg-elevated: #252525;
+  --admin-bg-subtle: #222222;
+  --admin-fg: rgba(255, 255, 255, 0.84);
+  --admin-fg-muted: rgba(255, 255, 255, 0.5);
+  --admin-fg-faint: rgba(255, 255, 255, 0.3);
+  --admin-line: rgba(255, 255, 255, 0.09);
+  --admin-line-strong: rgba(255, 255, 255, 0.15);
+  --admin-hover: rgba(255, 255, 255, 0.055);
+  --admin-active: rgba(255, 255, 255, 0.09);
+  --admin-accent: #8f8ee3;
+  --admin-accent-soft: rgba(122, 121, 217, 0.18);
+  --admin-accent-fg: #111111;
+  --admin-danger: #ff7369;
+  --admin-danger-soft: rgba(255, 115, 105, 0.12);
+  --admin-success: #4dab9a;
+  --admin-warning: #ffa344;
+  --admin-shadow:
+    rgba(0, 0, 0, 0.3) 0 0 0 1px, rgba(0, 0, 0, 0.4) 0 3px 6px,
+    rgba(0, 0, 0, 0.5) 0 9px 24px;
+  --admin-overlay: rgba(0, 0, 0, 0.6);
+
+  --tag-gray-bg: #373737;
+  --tag-gray-fg: rgba(255, 255, 255, 0.81);
+  --tag-brown-bg: #4a3328;
+  --tag-brown-fg: rgba(255, 255, 255, 0.81);
+  --tag-orange-bg: #5c3b23;
+  --tag-orange-fg: rgba(255, 255, 255, 0.81);
+  --tag-yellow-bg: #564328;
+  --tag-yellow-fg: rgba(255, 255, 255, 0.81);
+  --tag-green-bg: #243d30;
+  --tag-green-fg: rgba(255, 255, 255, 0.81);
+  --tag-blue-bg: #143a4e;
+  --tag-blue-fg: rgba(255, 255, 255, 0.81);
+  --tag-purple-bg: #3c2d49;
+  --tag-purple-fg: rgba(255, 255, 255, 0.81);
+  --tag-pink-bg: #4e2c3c;
+  --tag-pink-fg: rgba(255, 255, 255, 0.81);
+  --tag-red-bg: #522e2a;
+  --tag-red-fg: rgba(255, 255, 255, 0.81);
+}

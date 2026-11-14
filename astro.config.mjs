@@ -4,6 +4,7 @@ import { d1, r2 } from "@emdash-cms/cloudflare"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import emdash from "emdash/astro"
+import { notionAdmin } from "./src/admin/integration"
 import { markdownEditorPlugin } from "./src/plugins/markdown-editor"
 
 export default defineConfig({
@@ -24,5 +25,6 @@ export default defineConfig({
       storage: r2({ binding: "MEDIA" }),
       plugins: [markdownEditorPlugin()],
     }),
+    notionAdmin(),
   ],
 })
