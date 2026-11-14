@@ -6,6 +6,7 @@ import { TranslationNotice } from "./TranslationNotice/TranslationNotice"
 import type { BlogLocale, BlogPostData } from "../lib/blog-posts"
 import { readingTime } from "../lib/blog-posts"
 import { extractHeadings } from "../utils/extractHeadings"
+import { storedOgpResolver } from "../lib/ogp-store"
 import { renderMarkdown } from "../lib/render-markdown"
 
 interface Props {
@@ -14,7 +15,9 @@ interface Props {
   translationHref?: string
 }
 const { post, locale, translationHref } = Astro.props
-const html = await renderMarkdown(post.markdown)
+const html = await renderMarkdown(post.markdown, {
+  resolveOgp: storedOgpResolver,
+})
 const headings = extractHeadings(html)
 ---
 

@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config"
 import emdash, { local } from "emdash/astro"
 import { sqlite } from "emdash/db"
 import { notionAdmin } from "./src/admin/integration"
+import { linkCardsPlugin } from "./src/plugins/link-cards"
 import { markdownEditorPlugin } from "./src/plugins/markdown-editor"
 
 export default defineConfig({
@@ -26,7 +27,7 @@ export default defineConfig({
         directory: "./uploads",
         baseUrl: "/_emdash/api/media/file",
       }),
-      plugins: [markdownEditorPlugin()],
+      plugins: [markdownEditorPlugin(), linkCardsPlugin()],
     }),
     notionAdmin(),
   ],

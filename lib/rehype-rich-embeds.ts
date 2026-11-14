@@ -1,40 +1,18 @@
-import type { Element, ElementContent, Root, Text } from "hast"
+import type { Element, ElementContent, Root } from "hast"
 import type { Plugin } from "unified"
-import { fetchOgp, type OgpData } from "./ogp-fetcher"
+import {
+  legacyOgpResolver,
+  type OgpData,
+  type OgpResolver,
+  urlOnlyOgp,
+} from "./ogp-fetcher"
+import { collectStandaloneUrls } from "./standalone-url"
 
-const TWEET_URL_RE =
-  /^https?:\/\/(?:www\.)?(?:x|twitter)\.com\/([^/]+)\/status(?:es)?\/(\d+)/i
-
-function isWhitespaceText(node: ElementContent): boolean {
-  return node.type === "text" && /^\s*$/.test((node as Text).value)
-}
-
-function findStandaloneUrl(paragraph: Element): string | null {
-  const nonWs = paragraph.children.filter((c) => !isWhitespaceText(c))
-  if (nonWs.length !== 1) return null
-  const only = nonWs[0]
-
-  if (only.type === "text") {
-    const value = (only as Text).value.trim()
-    if (/^https?:\/\/\S+$/i.test(value) && !/\s/.test(value)) return value
-    return null
-  }
-
-  if (only.type === "element" && (only as Element).tagName === "a") {
-    const link = only as Element
-    const href = link.properties?.href
-    if (typeof href !== "string") return null
-    const text = link.children
-      .map((c) => (c.type === "text" ? (c as Text).value : ""))
-      .join("")
-      .trim()
-    if (text !== href) return null
-    if (!/^https?:\/\//i.test(href)) return null
-    return href
-  }
-
-  return null
-}
+/**
+ * 描画 1 回ごとに OGP の引き方を差し替えるときは、VFile の data に入れて渡す
+ * (src/lib/render-markdown.ts)。無ければ src/data/ogp-cache.json だけを見る。
+ */
+export type RichEmbedsFileData = { resolveOgp?: OgpResolver }
 
 function buildTweetEmbed(url: string): Element {
   return {
@@ -151,73 +129,31 @@ function buildLinkCard(data: OgpData): Element {
   }
 }
 
-function buildFallbackCard(url: string): Element {
-  let domain = url
-  try {
-    domain = new URL(url).hostname.replace(/^www\./, "")
-  } catch {
-    // keep url
-  }
-  return buildLinkCard({
-    url,
-    title: url,
-    domain,
-    favicon: `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`,
-  })
-}
-
-type Target = {
-  paragraph: Element
-  parent: Element | Root
-  index: number
-  url: string
-  kind: "tweet" | "ogp"
-}
-
-function collectTargets(root: Root): Target[] {
-  const targets: Target[] = []
-  const walk = (node: Element | Root) => {
-    const children = node.children as ElementContent[]
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i]
-      if (child.type !== "element") continue
-      const el = child as Element
-      if (el.tagName === "p") {
-        const url = findStandaloneUrl(el)
-        if (url) {
-          const kind: Target["kind"] = TWEET_URL_RE.test(url) ? "tweet" : "ogp"
-          targets.push({
-            paragraph: el,
-            parent: node as Element | Root,
-            index: i,
-            url,
-            kind,
-          })
-          continue
-        }
-      }
-      walk(el)
-    }
-  }
-  walk(root)
-  return targets
-}
-
 export const rehypeRichEmbeds: Plugin<[], Root> = () => {
-  return async (tree) => {
-    const targets = collectTargets(tree)
+  return async (tree, file) => {
+    const targets = collectStandaloneUrls(tree)
     if (targets.length === 0) return
 
-    const replacements = await Promise.all(
-      targets.map(async (t) => {
-        if (t.kind === "tweet") {
-          return { target: t, node: buildTweetEmbed(t.url) }
-        }
-        const data = await fetchOgp(t.url).catch(() => null)
-        const node = data ? buildLinkCard(data) : buildFallbackCard(t.url)
-        return { target: t, node }
-      }),
-    )
+    // 表示のたびに外へは取りに行かない。保存済みの値 (ストレージ → JSON) を読むだけ
+    const resolve =
+      (file.data as RichEmbedsFileData).resolveOgp ?? legacyOgpResolver
+    const ogpUrls = targets.filter((t) => t.kind === "ogp").map((t) => t.url)
+    const found =
+      ogpUrls.length > 0
+        ? await resolve(ogpUrls).catch(() => new Map<string, OgpData>())
+        : new Map<string, OgpData>()
+
+    const replacements = targets.map((t) => {
+      if (t.kind === "tweet") {
+        return { target: t, node: buildTweetEmbed(t.url) }
+      }
+      const data = found.get(t.url)
+      // リンク先は記事に書かれた URL のまま (保存済みの値は正規化した URL を持つ)
+      const node = buildLinkCard(
+        data ? { ...data, url: t.url } : urlOnlyOgp(t.url),
+      )
+      return { target: t, node }
+    })
 
     for (const { target, node } of replacements) {
       const children = target.parent.children as ElementContent[]

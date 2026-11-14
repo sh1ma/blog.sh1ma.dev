@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import emdash from "emdash/astro"
 import { notionAdmin } from "./src/admin/integration"
+import { linkCardsPlugin } from "./src/plugins/link-cards"
 import { markdownEditorPlugin } from "./src/plugins/markdown-editor"
 
 export default defineConfig({
@@ -23,7 +24,7 @@ export default defineConfig({
     emdash({
       database: d1({ binding: "DB" }),
       storage: r2({ binding: "MEDIA" }),
-      plugins: [markdownEditorPlugin()],
+      plugins: [markdownEditorPlugin(), linkCardsPlugin()],
     }),
     notionAdmin(),
   ],

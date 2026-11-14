@@ -13,8 +13,12 @@ import {
   type ThemeRegistrationRaw,
 } from "shiki"
 import { visit } from "unist-util-visit"
+import type { OgpResolver } from "../../lib/ogp-fetcher"
 import { rehypeHeadingAnchors } from "../../lib/rehype-heading-anchors"
-import { rehypeRichEmbeds } from "../../lib/rehype-rich-embeds"
+import {
+  type RichEmbedsFileData,
+  rehypeRichEmbeds,
+} from "../../lib/rehype-rich-embeds"
 import atomOneDarkJson from "../../themes/atom-one-dark.json"
 
 const atomOneDark = {
@@ -55,6 +59,15 @@ const processor = remark()
   .use(enableLineNumbers)
   .use(rehypeStringify)
 
-export async function renderMarkdown(markdown: string): Promise<string> {
-  return String(await processor.process(markdown))
+export type RenderMarkdownOptions = {
+  /** リンクカードの OGP の引き方。省略すると src/data/ogp-cache.json だけを見る */
+  resolveOgp?: OgpResolver
+}
+
+export async function renderMarkdown(
+  markdown: string,
+  options: RenderMarkdownOptions = {},
+): Promise<string> {
+  const data: RichEmbedsFileData = { resolveOgp: options.resolveOgp }
+  return String(await processor.process({ value: markdown, data }))
 }
