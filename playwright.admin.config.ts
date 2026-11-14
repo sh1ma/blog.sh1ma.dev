@@ -16,5 +16,13 @@ export default defineConfig({
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    // リンクカードの確認 (e2e/link-card.admin.ts) は Firefox でも動かす
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+      testMatch: "**/link-card.admin.ts",
+    },
+  ],
 })
