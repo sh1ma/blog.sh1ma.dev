@@ -53,6 +53,8 @@ const HOOK_URL: Record<string, string> = {
   firefox: "https://developers.cloudflare.com/r2/",
 }
 const TWEET_URL = "https://x.com/sh1ma/status/1790000000000000000"
+/** スラッシュコマンドで入れる URL (移行前の JSON にある) */
+const SLASH_URL = "https://developers.cloudflare.com/containers/pricing/"
 /** dev サーバー (astro.test.config.mjs) の DB */
 const DB_PATH = process.env.LINK_CARD_DB ?? "data.db"
 
@@ -411,6 +413,25 @@ test.describe("リンクカード (dev サーバー)", () => {
     )
   })
 
+  test("3b. スラッシュコマンドの「リンクカード」で URL を入れるとカードになる", async () => {
+    await body(page).locator("p").last().click()
+    await page.keyboard.type("/")
+    await expect(page.getByTestId("slash-menu")).toBeVisible()
+    await page.keyboard.type("リンクカード")
+    await page.keyboard.press("Enter")
+    const dialog = page.getByRole("dialog", { name: "リンクカード" })
+    await dialog.getByLabel("URL", { exact: true }).fill(SLASH_URL)
+    await dialog.getByRole("button", { name: "挿入" }).click()
+    const card = page.locator(
+      `[data-testid="link-card"][data-url="${SLASH_URL}"]`,
+    )
+    await expect(card.locator(".bwa-linkcard__title")).toHaveText("Pricing")
+    await expectSaved(page)
+    expect((await getPost(page.request, postId)).item.data.markdown).toContain(
+      `\n\n${SLASH_URL}\n`,
+    )
+  })
+
   test("4. カードの再取得・URL の変更・普通のリンクへの変換", async () => {
     const url = NEW_URL[browserName]
     const card = page.locator(`[data-testid="link-card"][data-url="${url}"]`)
@@ -462,6 +483,19 @@ test.describe("リンクカード (dev サーバー)", () => {
     expect(markdown).toContain(`\n\n[${LEGACY_TITLE}](${LEGACY_URL})\n`)
     // X の投稿のカードはそのまま
     expect(markdown).toContain(`\n\n${TWEET_URL}\n`)
+
+    // … メニューの「リンクカードを再取得」(残っているのはスラッシュコマンドで入れた 1 件)
+    await page.getByRole("button", { name: "その他の操作" }).click()
+    const refreshedAll = page.waitForResponse(
+      (response) =>
+        response.url().endsWith("/plugins/link-cards/ogp/refresh") &&
+        response.request().postData()?.includes(SLASH_URL) === true,
+    )
+    await page.getByRole("menuitem", { name: "リンクカードを再取得" }).click()
+    expect((await refreshedAll).status()).toBe(200)
+    await expect(
+      page.getByText("1 件のリンクカードを取り直しました"),
+    ).toBeVisible()
   })
 })
 
