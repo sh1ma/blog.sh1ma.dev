@@ -231,7 +231,7 @@ function TagChangeDialog({
     setStep("done")
   }
 
-  const describe = () => {
+  const operationSummary = () => {
     if (operation.kind === "rename") {
       return (
         <span className="flex flex-wrap items-center gap-1">
@@ -362,7 +362,7 @@ function TagChangeDialog({
               </datalist>
             </label>
           ) : null}
-          <div className="text-[13px]">{describe()}</div>
+          <div className="text-[13px]">{operationSummary()}</div>
           {problem ? (
             <p className="text-[13px] text-danger">{problem}</p>
           ) : null}
@@ -375,7 +375,7 @@ function TagChangeDialog({
         </div>
       ) : (
         <div className="grid gap-3">
-          <div className="text-[14px]">{describe()}</div>
+          <div className="text-[14px]">{operationSummary()}</div>
           <div className="bwa-callout text-[13px]">
             <PiWarningBold />
             <div>
