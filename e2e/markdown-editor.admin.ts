@@ -74,22 +74,22 @@ async function openPost(page: Page, id: string) {
   if (await welcome.isVisible().catch(() => false)) await welcome.click()
 }
 
-/** 管理画面の保存ボタンが「Saved」(未保存の変更なし) か */
+/**
+ * 未保存の変更がないか。EmDash 1.5 からは変更がないとき保存ボタン自体が
+ * 出ない (1.4 までは「Saved」と表示していた) ので、「Save」が無いことで見る。
+ */
 async function expectClean(page: Page) {
   await page.waitForTimeout(1500)
   await expect(
     page.getByRole("button", { name: "Save", exact: true }),
   ).toHaveCount(0)
-  await expect(
-    page.getByRole("button", { name: "Saved", exact: true }).first(),
-  ).toBeVisible()
 }
 
 async function save(page: Page) {
   await page.getByRole("button", { name: "Save", exact: true }).click()
   await expect(
-    page.getByRole("button", { name: "Saved", exact: true }).first(),
-  ).toBeVisible({ timeout: 30_000 })
+    page.getByRole("button", { name: "Save", exact: true }),
+  ).toHaveCount(0, { timeout: 30_000 })
 }
 
 /** 下書きの変更を公開する (確認ダイアログあり) */
