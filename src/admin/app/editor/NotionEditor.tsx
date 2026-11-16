@@ -243,16 +243,20 @@ export function NotionEditor({
       }),
       Extension.create({
         name: "notionEditorKeys",
-        addKeyboardShortcuts: () => ({
-          ArrowUp: ({ editor }) => {
+        addKeyboardShortcuts: () => {
+          // Keep handlers in lowercase-named functions: a PascalCase key such
+          // as ArrowUp holding an inline arrow function looks like a nested
+          // React component to Biome's noComponentHookFactories rule.
+          const exitTopOnArrowUp = ({ editor }: { editor: Editor }) => {
             const { $from, empty } = editor.state.selection
             if (!empty || $from.index(0) !== 0 || $from.parentOffset !== 0) {
               return false
             }
             callbacksRef.current.onExitTop?.()
             return Boolean(callbacksRef.current.onExitTop)
-          },
-        }),
+          }
+          return { ArrowUp: exitTopOnArrowUp }
+        },
       }),
     ],
     [selectSlash],
