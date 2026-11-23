@@ -102,9 +102,12 @@ async function copyModules(directory) {
 
 await copyModules(serverDir)
 await writeAssets({ root, sourceDirectory: assetsDir })
-await writeRootConfig(root, undefined, {
-  isPreview: false,
-  mode: process.env.CLOUDFLARE_ENV ?? "production",
+await writeRootConfig({
+  root,
+  buildContext: {
+    isPreview: false,
+    mode: process.env.CLOUDFLARE_ENV ?? "production",
+  },
 })
 await writeWorkerConfig({
   root,
