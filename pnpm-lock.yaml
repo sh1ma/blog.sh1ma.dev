@@ -119,8 +119,8 @@ importers:
         specifier: ^2.6.8
         version: 2.6.8
       '@cloudflare/build-output-utils':
-        specifier: ^0.9.14
-        version: 0.9.14
+        specifier: ^1.0.0-rc.1
+        version: 1.0.0-rc.1
       '@cloudflare/workers-types':
         specifier: ^5.20261121.1
         version: 5.20261121.1
@@ -589,14 +589,8 @@ packages:
     resolution: {integrity: sha512-LSNCvszcgEb+hgH1jpKCGaBrXScbahpjFVoXuDGiUyC9Td7hDR57+YdMMcBbhDa7S4GYaoCO1aziJYjvC0fwnw==}
     engines: {node: '>=16.0.0'}
 
-  '@cloudflare/build-output-utils@0.9.14':
-    resolution: {integrity: sha512-rr28N/PxViQ/g3lKmmh4hFbSCD+e+gu5fDzo8Mve9/mO8+JCB9z2TFggTtpWn52qPRxBvyplT0rsXNdkNXPAGQ==}
-
   '@cloudflare/build-output-utils@1.0.0-rc.1':
     resolution: {integrity: sha512-IrzZL1UEdVMZPRarrKu2VpnL3MIeNVhCItTebB88SwQ1YJ4mLAe1kQtXmIH7MpdgDYnxAsTZXMtuw9q5jRWCcw==}
-
-  '@cloudflare/config@0.32.1':
-    resolution: {integrity: sha512-ksIV3OtDJi6CbCWzQjmutFpMGKeALkueX21TyyQOs8NxS2v+DlBYoiYEKVeZOJ4eTDsTLoWyXcyJzOySgImTtg==}
 
   '@cloudflare/config@1.0.0-rc.1':
     resolution: {integrity: sha512-NQgB+fQbk8IU0iJ6/G9LCSQjJ7JuyRn5CALrPKnQ8vxqayOJlX+av9adhLCMYBeC80ocncW1Gy7quv00uLV3LQ==}
@@ -4956,17 +4950,9 @@ snapshots:
 
   '@cloudflare/ai-search-snippet@0.0.42': {}
 
-  '@cloudflare/build-output-utils@0.9.14':
-    dependencies:
-      '@cloudflare/config': 0.32.1
-
   '@cloudflare/build-output-utils@1.0.0-rc.1':
     dependencies:
       '@cloudflare/config': 1.0.0-rc.1
-
-  '@cloudflare/config@0.32.1':
-    dependencies:
-      zod: 4.6.6
 
   '@cloudflare/config@1.0.0-rc.1':
     dependencies:
@@ -5773,7 +5759,7 @@ snapshots:
     dependencies:
       '@hono/node-server': 2.1.8(hono@4.13.18)
       ajv: 8.20.0
-      ajv-formats: 3.0.1
+      ajv-formats: 3.0.1(ajv@8.20.0)
       content-type: 1.0.5
       cors: 2.8.6
       cross-spawn: 7.0.6
@@ -6594,8 +6580,8 @@ snapshots:
     optionalDependencies:
       ajv: 8.20.0
 
-  ajv-formats@3.0.1:
-    dependencies:
+  ajv-formats@3.0.1(ajv@8.20.0):
+    optionalDependencies:
       ajv: 8.20.0
 
   ajv-i18n@4.2.0(ajv@8.20.0):
