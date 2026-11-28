@@ -78,7 +78,7 @@
     "@types/react": "19.3.3",
     "@types/react-dom": "19.3.0",
     "cf": "1.0.0-rc.2",
-    "lint-staged": "^17.6.1",
+    "lint-staged": "^17.6.2",
     "tailwindcss": "^4.3.5",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.2.0",
